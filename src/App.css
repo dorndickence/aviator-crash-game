@@ -1,0 +1,35 @@
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+
+@keyframes animate-plane {
+  0% {
+    left: 0;
+    bottom: 0;
+    width: 50px;
+  }
+  25% {
+    bottom: 10%;
+  }
+  50% {
+    bottom: 20%;
+  }
+  75% {
+    bottom: 40%;
+  }
+  100% {
+    left: 80%;
+    bottom: 70%;
+    width: 100px;
+  }
+}
+
+.animate-plane {
+  animation-name: animate-plane;
+  animation-duration: 10s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}

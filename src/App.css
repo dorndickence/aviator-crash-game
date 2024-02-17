@@ -8,27 +8,27 @@
   0% {
     left: 0;
     bottom: 0;
-    width: 50px;
+    width: 3rem;
   }
   25% {
-    bottom: 10%;
-  }
-  50% {
     bottom: 20%;
   }
+  50% {
+    bottom: 10%;
+  }
   75% {
-    bottom: 40%;
+    bottom: 20%;
   }
   100% {
-    left: 80%;
+    left: 70%;
     bottom: 70%;
-    width: 100px;
+    width: 4rem;
   }
 }
 
 .animate-plane {
   animation-name: animate-plane;
-  animation-duration: 10s;
+  animation-duration: 15s;
   animation-iteration-count: 1;
   animation-timing-function: ease-in;
   animation-fill-mode: forwards;

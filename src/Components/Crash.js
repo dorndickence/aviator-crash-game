@@ -155,7 +155,10 @@ const Crash = () => {
             <span id="counterBox" className="hidden text-4xl"></span>
           </div>
           <div className="absolute z-20 left-[50%] bottom-[50%] translate-x-[-50%] translate-y-[-50%]">
-            <span id="crashedBox" className="text-1xl md:text-2xl hidden">
+            <span
+              id="crashedBox"
+              className="text-1xl md:text-2xl lg:text-4xl hidden"
+            >
               Crashed {crashNumber}x
             </span>
           </div>

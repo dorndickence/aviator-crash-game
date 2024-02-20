@@ -69,7 +69,14 @@ const Header = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <a className="btn">Button</a>
+          <div className="flex gap-5">
+            <a href="./login" className="btn glass">
+              Login
+            </a>
+            <a href="./register" className="btn glass">
+              Register
+            </a>
+          </div>
         </div>
       </div>
     </>

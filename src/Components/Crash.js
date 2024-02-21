@@ -8,6 +8,8 @@ import clock from "../sounds/clock.mp3";
 import Cookies from "js-cookie";
 import crashSoundSrc from "../sounds/crashSound.mp3";
 import crashedSoundSrc from "../sounds/crashedSound.mp3";
+import AnimeLeft from "./AnimeLeft";
+import AnimeBottom from "./AnimeBottom";
 
 const Crash = ({
   crashNumber,
@@ -16,13 +18,44 @@ const Crash = ({
   setCrashed,
   setAlert,
   setCashoutBtn,
+  timer,
+  setTimer,
 }) => {
   // const socket = io("ws://localhost:3001");
   let socket, socketInterval;
 
   // const [counter, setCounter] = useState("");
 
-  const [timer, setTimer] = useState("0");
+  //animation
+
+  const animateBottom = () => {
+    const aniteBot = document.querySelectorAll(".animated-divs-2 div");
+    aniteBot.forEach((abite) => {
+      abite.style.animation = "moveLeft 1s linear infinite";
+    });
+
+    const aniteBot2 = document.querySelectorAll(".animated-divs div");
+    aniteBot2.forEach((abite) => {
+      abite.style.animation = "moveDown 1s linear infinite";
+    });
+
+    // moveLeft 1s linear infinite
+  };
+  const animateBottomStop = () => {
+    const aniteBot = document.querySelectorAll(".animated-divs-2 div");
+    aniteBot.forEach((abite) => {
+      abite.style.animation = "none";
+    });
+
+    const aniteBot2 = document.querySelectorAll(".animated-divs div");
+    aniteBot2.forEach((abite) => {
+      abite.style.animation = "none";
+    });
+
+    // moveLeft 1s linear infinite
+  };
+  //animation end
+
   let userInteraction = false;
   const blastRef = useRef(null);
 
@@ -73,7 +106,7 @@ const Crash = ({
       socket = new WebSocket("ws://localhost:3001");
       socket.onclose = () => {
         connectionMsg.innerText = "Connecting...";
-        socketInterval = setInterval(socketConnect, 5000);
+        // socketInterval = setInterval(socketConnect, 5000);
       };
       socket.addEventListener("open", () => {
         clearInterval(socketInterval);
@@ -91,6 +124,7 @@ const Crash = ({
               svg.classList.remove("hidden");
 
               console.log("hit init ", socketData.crash);
+              animateBottom();
               setAlert(false);
               setCrashed(false);
               initGame = true;
@@ -114,6 +148,7 @@ const Crash = ({
             setCrashNumber(convert(socketData.crash));
             console.log("hit crashed");
             callBlastFunction();
+            animateBottomStop();
             initGame = false;
             setCashoutBtn(false);
             if (userInteraction) {
@@ -204,8 +239,10 @@ const Crash = ({
   //   return socket;
   return (
     <>
-      <div className="border-2 w-full h-[200px] md:h-[300px] relative">
-        <div>
+      <div className=" w-full h-[200px] md:h-[300px] relative">
+        <div className="w-full h-full">
+          <AnimeLeft />
+          <AnimeBottom />
           <div
             id="connectionMsg"
             className="absolute top-0 left-[50%] translate-x-[-50%]"
@@ -227,7 +264,7 @@ const Crash = ({
           <div id="animatePlane" className="absolute z-10 hidden max-w-[100px]">
             <img className="w-100%" src={fly} />
           </div>
-          <div id="blast" className="h-[50px] w-[50px] relative hidden">
+          <div id="blast" className="h-[50px] w-[50px] absolute hidden">
             <Blast ref={blastRef} />
           </div>
           <svg
@@ -254,11 +291,6 @@ const Crash = ({
             )}
           </div>
         </div>
-      </div>
-      <div>
-        <audio id="clockSound" src={clock} type="audio/mp3"></audio>
-        <audio id="crashSound" src={crashSoundSrc} type="audio/mp3"></audio>
-        <audio id="crashedSound" src={crashedSoundSrc} type="audio/mp3"></audio>
       </div>
     </>
   );

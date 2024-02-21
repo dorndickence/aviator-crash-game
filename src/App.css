@@ -33,3 +33,86 @@
   animation-timing-function: ease-in;
   animation-fill-mode: forwards;
 }
+
+.animated-divs div {
+  width: 5px; /* Adjust width as needed */
+  height: 5px; /* Adjust height as needed */
+  background-color: blue; /* Adjust color as needed */
+  margin-bottom: 20px; /* Adjust margin between divs as needed */
+  animation: none; /* Adjust animation duration as needed */
+  opacity: 1; /* Initially set opacity to 0 */
+  border-radius: 50%;
+  position: relative;
+}
+.animated-divs {
+  overflow: hidden;
+}
+@keyframes moveDown {
+  0% {
+    top: -5px; /* Start position */
+  }
+  100% {
+    top: 20px; /* End position */
+  }
+}
+
+.animated-divs-2 div {
+  width: 5px; /* Adjust width as needed */
+  height: 5px; /* Adjust height as needed */
+  background-color: blue; /* Adjust color as needed */
+  animation: none; /* Adjust animation duration as needed */
+  opacity: 1; /* Initially set opacity to 0 */
+  border-radius: 50%;
+  position: relative;
+  margin-left: 60px;
+}
+.animated-divs-2 {
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+}
+@keyframes moveLeft {
+  0% {
+    transform: translateX(0); /* Start position */
+  }
+  100% {
+    transform: translateX(calc(-100% - 60px)); /* End position */
+  }
+}
+
+/* .anime {
+  position: absolute;
+  animation-name: dot;
+
+  animation-iteration-count: infinite;
+}
+
+.delay1 {
+  animation-delay: 1s;
+  animation-duration: 5s;
+}
+.delay2 {
+  animation-delay: 2s;
+  animation-duration: 6s;
+}
+.delay3 {
+  animation-delay: 3s;
+  animation-duration: 7s;
+}
+.delay4 {
+  animation-delay: 4s;
+  animation-duration: 8s;
+}
+.delay5 {
+  animation-delay: 5s;
+  animation-duration: 9s;
+}
+
+@keyframes dot {
+  0% {
+    top: 0;
+  }
+  100% {
+    top: 100%;
+  }
+} */

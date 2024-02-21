@@ -10,6 +10,7 @@ const Bet = ({
   setAlert,
   cashoutBtn,
   setCashoutBtn,
+  timer,
 }) => {
   const [amount, setAmount] = useState(0);
   const [betData, setBetData] = useState([]);
@@ -47,10 +48,16 @@ const Bet = ({
         })
         .then((data) => {
           if (data.status === 200) {
-            // console.log(data.data);
             setAlert(data.data);
             setCashoutBtn(true);
-            e.target.setAttribute("disabled", true);
+            // e.target.setAttribute("disabled", true);
+            e.target.removeAttribute("onClick");
+            e.target.classList.remove(
+              "bg-green-700",
+              "hover:bg-green-700",
+              "text-white"
+            );
+            e.target.classList.add("bg-green-950", "hover:bg-green-950");
           }
         })
         .catch((error) => {
@@ -77,7 +84,6 @@ const Bet = ({
           setAlert(data.data);
           setCashoutBtn(false);
         }
-        console.log(alert);
       })
       .catch((error) => {
         setAlert(error.response.data);
@@ -115,37 +121,38 @@ const Bet = ({
         <div id="errorMsg"></div>
 
         <div className="flex justify-center gap-3">
-          {crashed ? (
+          {/* {} */}
+          {crashed && timer >= 2 && timer <= 10 ? (
             <>
               <button
                 id="beBTn"
                 onClick={bet}
-                className="btn btn-wide w-[49%] btn-warning"
+                className="btn btn-wide w-[49%] bg-green-700 hover:bg-green-700 text-white"
               >
                 Place Bet
               </button>
-              <button disabled className="btn btn-wide w-[49%] btn-error">
+              <button className="btn btn-wide w-[49%] bg-rose-950 hover:bg-rose-950">
                 Cashout
               </button>
             </>
           ) : (
             <>
-              <button disabled className="btn btn-wide w-[49%] btn-warning">
+              <button className="btn btn-wide w-[49%] bg-green-950 hover:bg-green-950 ">
                 Place Bet
               </button>
-
+              {/* {} */}
               {cashoutBtn ? (
                 <>
                   <button
                     onClick={cashout}
-                    className="btn btn-wide w-[49%] btn-error"
+                    className="btn btn-wide w-[49%]  bg-rose-700 hover:bg-rose-700 text-white"
                   >
                     Cashout
                   </button>
                 </>
               ) : (
                 <>
-                  <button disabled className="btn btn-wide w-[49%] btn-error">
+                  <button className="btn btn-wide w-[49%]  bg-rose-950 hover:bg-rose-950">
                     Cashout
                   </button>
                 </>
@@ -154,9 +161,23 @@ const Bet = ({
           )}
         </div>
       </div>
+      <div className="flex justify-around bg-emerald-950 py-4 rounded-t-box">
+        <div className="text-center">
+          <div className=" text-xs">Number of players</div>
+          <div className="font-bold text-xs">12323</div>
+        </div>
+        <div className="text-center">
+          <div className=" text-xs">Number of players</div>
+          <div className="font-bold text-xs">12323</div>
+        </div>
+        <div className="text-center">
+          <div className=" text-xs">Number of players</div>
+          <div className="font-bold text-xs">12323</div>
+        </div>
+      </div>
       <div className="py-6">
-        <div className="overflow-x-auto">
-          <table className="table">
+        <div className="overflow-y-auto">
+          <table className="table  text-center">
             {/* head */}
             <thead>
               <tr>
@@ -166,7 +187,7 @@ const Bet = ({
                 <th>Win</th>
               </tr>
             </thead>
-            <tbody id="betRow" className="text-xs">
+            <tbody id="betRow" className="text-xs max-h-[300px]">
               {betData.map((livedata, index) => (
                 <tr
                   key={index}

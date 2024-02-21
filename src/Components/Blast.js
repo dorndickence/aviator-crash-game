@@ -31,14 +31,16 @@ const Blast = forwardRef((props, ref) => {
 
   return (
     <>
-      <div className="flame"></div>
-      <div className="flame"></div>
-      <div className="flame"></div>
-      <div className="flame"></div>
-      <div className="flame"></div>
-      <div className="flame"></div>
-      <div className="flame"></div>
-      <div className="flame"></div>
+      <div className="w-full h-full">
+        <div className="flame"></div>
+        <div className="flame"></div>
+        <div className="flame"></div>
+        <div className="flame"></div>
+        <div className="flame"></div>
+        <div className="flame"></div>
+        <div className="flame"></div>
+        <div className="flame"></div>
+      </div>
     </>
   );
 });

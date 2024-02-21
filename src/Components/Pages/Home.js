@@ -7,6 +7,7 @@ import Bet from "../Bet";
 const Home = () => {
   const [crashNumber, setCrashNumber] = useState("");
   const [crashed, setCrashed] = useState(true);
+  const [timer, setTimer] = useState("0");
 
   const [alert, setAlert] = useState(false);
   const [cashoutBtn, setCashoutBtn] = useState(false);
@@ -59,6 +60,8 @@ const Home = () => {
             setCrashed={setCrashed}
             setAlert={setAlert}
             setCashoutBtn={setCashoutBtn}
+            timer={timer}
+            setTimer={setTimer}
           />
           <Bet
             crashNumber={crashNumber}
@@ -67,6 +70,7 @@ const Home = () => {
             setAlert={setAlert}
             cashoutBtn={cashoutBtn}
             setCashoutBtn={setCashoutBtn}
+            timer={timer}
           />
         </div>
       </div>

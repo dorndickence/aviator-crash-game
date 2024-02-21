@@ -2,8 +2,14 @@ import Graph from "./Graph";
 import Crash from "../Crash";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
+import Bet from "../Bet";
 
 const Home = () => {
+  const [crashNumber, setCrashNumber] = useState("");
+  const [crashed, setCrashed] = useState(true);
+
+  const [alert, setAlert] = useState(false);
+  const [cashoutBtn, setCashoutBtn] = useState(false);
   const soundController = (e) => {
     if (Cookies.get("sound")) {
       Cookies.remove("sound");
@@ -46,7 +52,22 @@ const Home = () => {
           />
         </div>
         <div className="max-w-lg m-auto">
-          <Crash />
+          <Crash
+            setCrashNumber={setCrashNumber}
+            crashNumber={crashNumber}
+            crashed={crashed}
+            setCrashed={setCrashed}
+            setAlert={setAlert}
+            setCashoutBtn={setCashoutBtn}
+          />
+          <Bet
+            crashNumber={crashNumber}
+            crashed={crashed}
+            alert={alert}
+            setAlert={setAlert}
+            cashoutBtn={cashoutBtn}
+            setCashoutBtn={setCashoutBtn}
+          />
         </div>
       </div>
     </>

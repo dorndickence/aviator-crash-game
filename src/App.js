@@ -6,6 +6,7 @@ import Blast from "./Components/Blast";
 import Footer from "./Components/Pages/Footer";
 import Login from "./Components/Pages/Login";
 import Register from "./Components/Pages/Register";
+import Cookies from "js-cookie";
 
 function App() {
   return (
@@ -13,8 +14,15 @@ function App() {
       <Header />
       <Routes>
         <Route index element={<Home />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        {Cookies.get("token") ? (
+          ""
+        ) : (
+          <>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </>
+        )}
+
         {/* <Route path="*" element={<NoPage />} /> */}
       </Routes>
       <Footer />

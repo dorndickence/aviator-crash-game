@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 const Header = () => {
   return (
     <>
@@ -70,12 +71,25 @@ const Header = () => {
         </div>
         <div className="navbar-end">
           <div className="flex gap-5">
-            <a href="./login" className="btn glass">
-              Login
-            </a>
-            <a href="./register" className="btn glass">
-              Register
-            </a>
+            {Cookies.get("token") ? (
+              <>
+                <a href="./wallet" className="btn glass">
+                  Wallet
+                </a>
+                <a href="./deposit" className="btn glass">
+                  Deposit
+                </a>
+              </>
+            ) : (
+              <>
+                <a href="./login" className="btn glass">
+                  Login
+                </a>
+                <a href="./register" className="btn glass">
+                  Register
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>

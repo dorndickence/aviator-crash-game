@@ -9,12 +9,19 @@ import Cookies from "js-cookie";
 import crashSoundSrc from "../sounds/crashSound.mp3";
 import crashedSoundSrc from "../sounds/crashedSound.mp3";
 
-const Crash = () => {
+const Crash = ({
+  crashNumber,
+  setCrashNumber,
+  crashed,
+  setCrashed,
+  setAlert,
+  setCashoutBtn,
+}) => {
   // const socket = io("ws://localhost:3001");
-  const socket = new WebSocket("ws://localhost:3001");
-  const [crashNumber, setCrashNumber] = useState("");
+  let socket, socketInterval;
+
   // const [counter, setCounter] = useState("");
-  const [crashed, setCrashed] = useState(true);
+
   const [timer, setTimer] = useState("0");
   let userInteraction = false;
   const blastRef = useRef(null);
@@ -39,10 +46,12 @@ const Crash = () => {
     const blast = document.getElementById("blast");
     const svg = document.getElementById("svg");
     const line = document.getElementById("line");
-    const clockSound = document.getElementById("clockSound");
-    const crashSound = document.getElementById("crashSound");
-    const crashedSound = document.getElementById("crashedSound");
+    const clockSound = new Audio(clock);
+    const crashSound = new Audio(crashSoundSrc);
+    const crashedSound = new Audio(crashedSoundSrc);
     const crashedBox = document.getElementById("crashedBox");
+    const connectionMsg = document.getElementById("connectionMsg");
+    const betRow = document.getElementById("betRow"); //in bet.js
     function updateLine() {
       const rect = animatePlane.getBoundingClientRect();
       const svgRect = svg.getBoundingClientRect();
@@ -60,70 +69,116 @@ const Crash = () => {
     let initGame = false;
     // Subscribe to the 'crash' event
 
-    socket.onmessage = function (event) {
-      const socketData = decrypt(event.data);
-      if (socketData.type === "crash") {
-        counterBox.innerText = convert(socketData.crash) + "x";
-        updateLine();
+    const socketConnect = () => {
+      socket = new WebSocket("ws://localhost:3001");
+      socket.onclose = () => {
+        connectionMsg.innerText = "Connecting...";
+        socketInterval = setInterval(socketConnect, 5000);
+      };
+      socket.addEventListener("open", () => {
+        clearInterval(socketInterval);
+        connectionMsg.innerText = "";
+        socket.onmessage = function (event) {
+          const socketData = decrypt(event.data);
+          if (socketData.type === "crash") {
+            counterBox.innerText = convert(socketData.crash) + "x";
+            updateLine();
 
-        if (!initGame && timer === "0") {
-          animatePlane.classList.add("animate-plane");
-          animatePlane.classList.remove("hidden");
-          counterBox.classList.remove("hidden");
-          svg.classList.remove("hidden");
+            if (!initGame && timer === "0") {
+              animatePlane.classList.add("animate-plane");
+              animatePlane.classList.remove("hidden");
+              counterBox.classList.remove("hidden");
+              svg.classList.remove("hidden");
 
-          console.log("hit init ", socketData.crash);
-          setCrashed(false);
-          initGame = true;
-          if (socketData.crash > 1.3) {
-            animatePlane.style.animationDuration = "3s";
-          }
-        }
-      }
-
-      if (socketData.type === "crashed") {
-        setCrashed(socketData.crashed);
-        animatePlane.classList.remove("animate-plane");
-        animatePlane.classList.add("hidden");
-        counterBox.classList.add("hidden");
-        svg.classList.add("hidden");
-        blast.classList.remove("hidden");
-        crashedBox.classList.remove("hidden");
-        setCrashNumber(convert(socketData.crash));
-        console.log("hit crashed");
-        callBlastFunction();
-        initGame = false;
-        if (userInteraction) {
-          if (Cookies.get("sound")) {
-            crashSound.pause();
-            crashSound.currentTime = 0;
-            crashedSound.play();
-            setTimeout(() => {
-              clockSound.play();
-            }, 3000);
-          }
-        }
-      }
-
-      if (socketData.type === "timer") {
-        setTimer(socketData.timer);
-        if (socketData.timer === 2) {
-          blast.classList.add("hidden");
-          crashedBox.classList.add("hidden");
-          callBlastFunction("reset");
-        }
-
-        if (socketData.timer === 10) {
-          if (userInteraction) {
-            if (Cookies.get("sound")) {
-              setTimeout(() => {
-                crashSound.play();
-              }, 3000);
+              console.log("hit init ", socketData.crash);
+              setAlert(false);
+              setCrashed(false);
+              initGame = true;
+              if (socketData.crash > 1.3) {
+                animatePlane.style.animationDuration = "3s";
+              }
+              if (socketData.crash < 1.3) {
+                animatePlane.style.animationDuration = "10s";
+              }
             }
           }
-        }
-      }
+
+          if (socketData.type === "crashed") {
+            setCrashed(socketData.crashed);
+            animatePlane.classList.remove("animate-plane");
+            animatePlane.classList.add("hidden");
+            counterBox.classList.add("hidden");
+            svg.classList.add("hidden");
+            blast.classList.remove("hidden");
+            crashedBox.classList.remove("hidden");
+            setCrashNumber(convert(socketData.crash));
+            console.log("hit crashed");
+            callBlastFunction();
+            initGame = false;
+            setCashoutBtn(false);
+            if (userInteraction) {
+              if (Cookies.get("sound")) {
+                crashSound.pause();
+                crashSound.currentTime = 0;
+                crashedSound.play();
+                setTimeout(() => {
+                  clockSound.play();
+                }, 2000);
+              }
+            }
+          }
+
+          if (socketData.type === "timer") {
+            setTimer(socketData.timer);
+            if (socketData.timer === 2) {
+              blast.classList.add("hidden");
+              crashedBox.classList.add("hidden");
+              callBlastFunction("reset");
+              betRow.innerHTML = "";
+            }
+
+            if (socketData.timer === 10) {
+              if (userInteraction) {
+                if (Cookies.get("sound")) {
+                  setTimeout(() => {
+                    crashSound.play();
+                  }, 3000);
+                }
+              }
+            }
+          }
+
+          if (socketData.type === "betData") {
+            const newBewRow = document.createElement("tr");
+            newBewRow.classList.add(`bet${socketData.betData._id}`);
+            const newbetRowTdForUsername = document.createElement("td");
+            const newbetRowTdForWin = document.createElement("td");
+            const newbetRowTdForOdds = document.createElement("td");
+            const newbetRowTdForAmount = document.createElement("td");
+            newbetRowTdForAmount.innerText = socketData.betData.amount;
+            newbetRowTdForWin.innerText = socketData.betData.win;
+            newbetRowTdForOdds.innerText = `x${socketData.betData.odds}`;
+            newbetRowTdForUsername.innerText =
+              socketData.betData.publicUsername;
+            newBewRow.appendChild(newbetRowTdForUsername);
+            newBewRow.appendChild(newbetRowTdForOdds);
+            newBewRow.appendChild(newbetRowTdForAmount);
+            newBewRow.appendChild(newbetRowTdForWin);
+            betRow.appendChild(newBewRow);
+            // setBetData(socketData.betData);
+          }
+
+          if (socketData.type === "winData") {
+            const winElement = document.querySelector(`.bet${socketData._id}`);
+
+            winElement.classList.add("text-green-300");
+            winElement.childNodes[3].innerText = socketData.amount;
+            winElement.childNodes[1].innerText = `${socketData.odds}x`;
+          }
+        };
+      });
     };
+    socketConnect();
   }, []); // Run this effect only once on component mount
 
   const resetCrashTemporary = () => {
@@ -151,6 +206,12 @@ const Crash = () => {
     <>
       <div className="border-2 w-full h-[200px] md:h-[300px] relative">
         <div>
+          <div
+            id="connectionMsg"
+            className="absolute top-0 left-[50%] translate-x-[-50%]"
+          >
+            Connecting
+          </div>
           <div className="absolute z-40 right-12 bottom-12">
             <span id="counterBox" className="hidden text-4xl"></span>
           </div>

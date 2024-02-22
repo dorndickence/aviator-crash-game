@@ -20,6 +20,13 @@ const Crash = ({
   setCashoutBtn,
   timer,
   setTimer,
+  setBets,
+  setWinnings,
+  setPlayers,
+  bets,
+  winnings,
+  players,
+  styleButton,
 }) => {
   // const socket = io("ws://localhost:3001");
   let socket, socketInterval;
@@ -84,7 +91,12 @@ const Crash = ({
     const crashedSound = new Audio(crashedSoundSrc);
     const crashedBox = document.getElementById("crashedBox");
     const connectionMsg = document.getElementById("connectionMsg");
-    const betRow = document.getElementById("betRow"); //in bet.js
+    //in bet.js
+    const betRow = document.getElementById("betRow");
+    const totalWinnings = document.getElementById("totalWinnings");
+    const totalPlayers = document.getElementById("totalPlayers");
+    const totalBets = document.getElementById("totalBets");
+    //in bet.js end
     function updateLine() {
       const rect = animatePlane.getBoundingClientRect();
       const svgRect = svg.getBoundingClientRect();
@@ -122,7 +134,7 @@ const Crash = ({
               animatePlane.classList.remove("hidden");
               counterBox.classList.remove("hidden");
               svg.classList.remove("hidden");
-
+              styleButton("bet", "disable");
               console.log("hit init ", socketData.crash);
               animateBottom();
               setAlert(false);
@@ -147,10 +159,12 @@ const Crash = ({
             crashedBox.classList.remove("hidden");
             setCrashNumber(convert(socketData.crash));
             console.log("hit crashed");
+            styleButton("bet", "disable");
+            styleButton("cashout", "disable");
             callBlastFunction();
             animateBottomStop();
             initGame = false;
-            setCashoutBtn(false);
+
             if (userInteraction) {
               if (Cookies.get("sound")) {
                 crashSound.pause();
@@ -169,10 +183,19 @@ const Crash = ({
               blast.classList.add("hidden");
               crashedBox.classList.add("hidden");
               callBlastFunction("reset");
+              setAlert(false);
               betRow.innerHTML = "";
+              setWinnings(0);
+              setBets(0);
+              setPlayers(0);
+              totalPlayers.innerText = 0;
+              totalWinnings.innerText = 0;
+              totalBets.innerText = 0;
+              styleButton("bet", "active");
             }
 
             if (socketData.timer === 10) {
+              styleButton("bet", "disable");
               if (userInteraction) {
                 if (Cookies.get("sound")) {
                   setTimeout(() => {
@@ -201,6 +224,20 @@ const Crash = ({
             newBewRow.appendChild(newbetRowTdForWin);
             betRow.appendChild(newBewRow);
             // setBetData(socketData.betData);
+
+            totalPlayers.innerText = parseInt(totalPlayers.innerText) + 1;
+
+            totalBets.innerText =
+              parseInt(totalBets.innerText) +
+              parseFloat(socketData.betData.amount);
+
+            if (Cookies.get("token")) {
+              if (socketData.betData.token === Cookies.get("token")) {
+                setTimeout(() => {
+                  styleButton("cashout", "active");
+                }, socketData.betData.timeout);
+              }
+            }
           }
 
           if (socketData.type === "winData") {
@@ -209,6 +246,16 @@ const Crash = ({
             winElement.classList.add("text-green-300");
             winElement.childNodes[3].innerText = socketData.amount;
             winElement.childNodes[1].innerText = `${socketData.odds}x`;
+
+            totalWinnings.innerText = (
+              parseInt(totalWinnings.innerText) + parseFloat(socketData.amount)
+            ).toFixed(2);
+
+            if (Cookies.get("token")) {
+              if (socketData.token === Cookies.get("token")) {
+                styleButton("cashout", "disabled");
+              }
+            }
           }
         };
       });

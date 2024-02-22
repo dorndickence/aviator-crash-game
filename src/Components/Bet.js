@@ -11,6 +11,13 @@ const Bet = ({
   cashoutBtn,
   setCashoutBtn,
   timer,
+  bets,
+  winnings,
+  players,
+  setBets,
+  setWinnings,
+  setPlayers,
+  styleButton,
 }) => {
   const [amount, setAmount] = useState(0);
   const [betData, setBetData] = useState([]);
@@ -23,8 +30,9 @@ const Bet = ({
         msg.innerText = "Please login to play";
         errorMsg.appendChild(msg);
       }
-      return;
+      return false;
     }
+    return true;
   };
 
   const amountMethod = (e) => {
@@ -38,7 +46,9 @@ const Bet = ({
   };
   const bet = (e) => {
     let errorMsg = document.getElementById("errorMsg");
-    loginValidation();
+    if (!loginValidation()) {
+      return;
+    }
 
     if (amount > 0) {
       axios
@@ -49,15 +59,8 @@ const Bet = ({
         .then((data) => {
           if (data.status === 200) {
             setAlert(data.data);
-            setCashoutBtn(true);
             // e.target.setAttribute("disabled", true);
-            e.target.removeAttribute("onClick");
-            e.target.classList.remove(
-              "bg-green-700",
-              "hover:bg-green-700",
-              "text-white"
-            );
-            e.target.classList.add("bg-green-950", "hover:bg-green-950");
+            styleButton("bet", "disable");
           }
         })
         .catch((error) => {
@@ -73,7 +76,9 @@ const Bet = ({
     }
   };
   const cashout = (e) => {
-    loginValidation();
+    if (!loginValidation()) {
+      return;
+    }
     axios
       .post(`${process.env.REACT_APP_API_URL}cashout`, {
         amount: amount,
@@ -92,9 +97,17 @@ const Bet = ({
 
   const getBetData = () => {
     axios
-      .post(`${process.env.REACT_APP_API_URL}betlive`)
+      .post(`${process.env.REACT_APP_API_URL}betlive`, {
+        token: Cookies.get("token"),
+      })
       .then((data) => {
-        setBetData(data.data.data);
+        setBetData(data.data.data.livebets);
+        setBets(data.data.data.bets);
+        setPlayers(data.data.data.players);
+        setWinnings(data.data.data.winnings);
+        if (data.data.data.userBetActve) {
+          styleButton("cashout", "active");
+        }
       })
       .catch((error) => {
         setAlert(error.response.data);
@@ -121,58 +134,52 @@ const Bet = ({
         <div id="errorMsg"></div>
 
         <div className="flex justify-center gap-3">
-          {/* {} */}
-          {crashed && timer >= 2 && timer <= 10 ? (
-            <>
-              <button
-                id="beBTn"
-                onClick={bet}
-                className="btn btn-wide w-[49%] bg-green-700 hover:bg-green-700 text-white"
-              >
-                Place Bet
-              </button>
-              <button className="btn btn-wide w-[49%] bg-rose-950 hover:bg-rose-950">
-                Cashout
-              </button>
-            </>
-          ) : (
-            <>
-              <button className="btn btn-wide w-[49%] bg-green-950 hover:bg-green-950 ">
-                Place Bet
-              </button>
-              {/* {} */}
-              {cashoutBtn ? (
-                <>
-                  <button
-                    onClick={cashout}
-                    className="btn btn-wide w-[49%]  bg-rose-700 hover:bg-rose-700 text-white"
-                  >
-                    Cashout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button className="btn btn-wide w-[49%]  bg-rose-950 hover:bg-rose-950">
-                    Cashout
-                  </button>
-                </>
-              )}
-            </>
-          )}
+          <button
+            id="beBTn"
+            onClick={bet}
+            className="btn btn-wide w-[49%] bg-green-700 hover:bg-green-700 text-white"
+          >
+            Place Bet
+          </button>
+          <button
+            id="beBTnFake"
+            className="btn hidden btn-wide w-[49%] bg-green-950 hover:bg-green-950"
+          >
+            Place Bet
+          </button>
+          <button
+            id="cashoutBtn"
+            onClick={cashout}
+            className="btn hidden btn-wide w-[49%] bg-rose-700 hover:bg-rose-700 text-white"
+          >
+            Cashout
+          </button>
+          <button
+            id="cashoutBtnFake"
+            className="btn btn-wide w-[49%] bg-rose-950 hover:bg-rose-950"
+          >
+            Cashout
+          </button>
         </div>
       </div>
       <div className="flex justify-around bg-emerald-950 py-4 rounded-t-box">
         <div className="text-center">
           <div className=" text-xs">Number of players</div>
-          <div className="font-bold text-xs">12323</div>
+          <div className="font-bold text-xs" id="totalPlayers">
+            {players}
+          </div>
         </div>
         <div className="text-center">
-          <div className=" text-xs">Number of players</div>
-          <div className="font-bold text-xs">12323</div>
+          <div className=" text-xs">Total bets</div>
+          <div className="font-bold text-xs" id="totalBets">
+            {bets}
+          </div>
         </div>
         <div className="text-center">
-          <div className=" text-xs">Number of players</div>
-          <div className="font-bold text-xs">12323</div>
+          <div className=" text-xs">Total winnings</div>
+          <div className="font-bold text-xs" id="totalWinnings">
+            {winnings}
+          </div>
         </div>
       </div>
       <div className="py-6">

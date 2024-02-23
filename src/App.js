@@ -7,6 +7,7 @@ import Footer from "./Components/Pages/Footer";
 import Login from "./Components/Pages/Login";
 import Register from "./Components/Pages/Register";
 import Cookies from "js-cookie";
+import Deposit from "./Components/Pages/Deposit";
 
 function App() {
   return (
@@ -15,7 +16,9 @@ function App() {
       <Routes>
         <Route index element={<Home />} />
         {Cookies.get("token") ? (
-          ""
+          <>
+            <Route path="deposit" element={<Deposit />} />
+          </>
         ) : (
           <>
             <Route path="login" element={<Login />} />

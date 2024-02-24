@@ -3,14 +3,14 @@ import { useEffect, useState, useRef } from "react";
 import { Decimal } from "decimal.js";
 import CryptoJS from "crypto-js";
 import fly from "../images/fly.png";
-import Blast from "./Blast";
+import blastImg from "../images/blast.png";
 import clock from "../sounds/clock.mp3";
 import Cookies from "js-cookie";
 import crashSoundSrc from "../sounds/crashSound.mp3";
 import crashedSoundSrc from "../sounds/crashedSound.mp3";
 import AnimeLeft from "./AnimeLeft";
 import AnimeBottom from "./AnimeBottom";
-
+import bgsky from "../images/bgsky.jpg";
 const Crash = ({
   crashNumber,
   setCrashNumber,
@@ -64,13 +64,13 @@ const Crash = ({
   //animation end
 
   let userInteraction = false;
-  const blastRef = useRef(null);
+  // const blastRef = useRef(null);
 
-  const callBlastFunction = (type) => {
-    if (blastRef.current) {
-      blastRef.current.animateNow(type);
-    }
-  };
+  // const callBlastFunction = (type) => {
+  //   if (blastRef.current) {
+  //     blastRef.current.animateNow(type);
+  //   }
+  // };
 
   useEffect(() => {
     document.body.addEventListener(
@@ -80,9 +80,10 @@ const Crash = ({
       },
       { once: true }
     );
-
+    const animateBox = document.getElementById("animateBox");
     const animatePlane = document.getElementById("animatePlane");
     const counterBox = document.getElementById("counterBox");
+    const bgsky = document.getElementById("bgsky");
     const blast = document.getElementById("blast");
     const svg = document.getElementById("svg");
     const line = document.getElementById("line");
@@ -98,7 +99,7 @@ const Crash = ({
     const totalBets = document.getElementById("totalBets");
     //in bet.js end
     function updateLine() {
-      const rect = animatePlane.getBoundingClientRect();
+      const rect = animateBox.getBoundingClientRect();
       const svgRect = svg.getBoundingClientRect();
       const x = rect.left + rect.width / 2 - svgRect.left;
       const y = rect.top + rect.height / 2 - svgRect.top;
@@ -108,21 +109,42 @@ const Crash = ({
       line.setAttribute("y2", y);
 
       //blast follow the plane too
-      blast.style.left = x - 50 + "px";
-      blast.style.top = y - 50 + "px";
+      // blast.style.left = x - 50 + "px";
+      // blast.style.top = y - 50 + "px";
     }
     let initGame = false;
     // Subscribe to the 'crash' event
 
     const socketConnect = () => {
-      socket = new WebSocket("ws://localhost:3001");
+      let socketUrl = `ws://localhost:3001`;
+      if (Cookies.get("socketuserId")) {
+        socketUrl = `ws://localhost:3001?socketuserId=${Cookies.get(
+          "socketuserId"
+        )}`;
+      }
+
+      socket = new WebSocket(socketUrl);
       socket.onclose = () => {
-        connectionMsg.innerText = "Connecting...";
+        connectionMsg.innerText = "Connection lost";
         // socketInterval = setInterval(socketConnect, 5000);
+
+        crashSound.pause();
+        crashSound.currentTime = 0;
+        crashedSound.pause();
+        crashedSound.currentTime = 0;
+        clockSound.pause();
+        clockSound.currentTime = 0;
+        animatePlane.classList.add("hidden");
+        blast.classList.add("hidden");
+        initGame = false;
       };
-      socket.addEventListener("open", () => {
-        clearInterval(socketInterval);
-        connectionMsg.innerText = "";
+      socket.onopen = () => {
+        // clearInterval(socketInterval);
+
+        setTimeout(() => {
+          connectionMsg.innerText = "";
+        }, 1000);
+
         socket.onmessage = function (event) {
           const socketData = decrypt(event.data);
           if (socketData.type === "crash") {
@@ -130,28 +152,31 @@ const Crash = ({
             updateLine();
 
             if (!initGame && timer === "0") {
-              animatePlane.classList.add("animate-plane");
+              animateBox.classList.add("animate-plane");
+              animateBox.style.animationPlayState = "running";
               animatePlane.classList.remove("hidden");
               counterBox.classList.remove("hidden");
               svg.classList.remove("hidden");
               styleButton("bet", "disable");
               console.log("hit init ", socketData.crash);
+              bgsky.classList.add("bgskyAnimate");
               animateBottom();
               setAlert(false);
               setCrashed(false);
               initGame = true;
+
               if (socketData.crash > 1.3) {
-                animatePlane.style.animationDuration = "3s";
+                animateBox.style.animationDuration = "3s";
               }
               if (socketData.crash < 1.3) {
-                animatePlane.style.animationDuration = "10s";
+                animateBox.style.animationDuration = "10s";
               }
             }
           }
 
           if (socketData.type === "crashed") {
             setCrashed(socketData.crashed);
-            animatePlane.classList.remove("animate-plane");
+            animateBox.style.animationPlayState = "paused";
             animatePlane.classList.add("hidden");
             counterBox.classList.add("hidden");
             svg.classList.add("hidden");
@@ -161,7 +186,7 @@ const Crash = ({
             console.log("hit crashed");
             styleButton("bet", "disable");
             styleButton("cashout", "disable");
-            callBlastFunction();
+            // callBlastFunction();
             animateBottomStop();
             initGame = false;
 
@@ -181,8 +206,10 @@ const Crash = ({
             setTimer(socketData.timer);
             if (socketData.timer === 2) {
               blast.classList.add("hidden");
+              animateBox.classList.remove("animate-plane");
               crashedBox.classList.add("hidden");
-              callBlastFunction("reset");
+              bgsky.classList.remove("bgskyAnimate");
+              // callBlastFunction("reset");
               setAlert(false);
               betRow.innerHTML = "";
               setWinnings(0);
@@ -200,7 +227,7 @@ const Crash = ({
                 if (Cookies.get("sound")) {
                   setTimeout(() => {
                     crashSound.play();
-                  }, 3000);
+                  }, 1000);
                 }
               }
             }
@@ -257,10 +284,20 @@ const Crash = ({
               }
             }
           }
+
+          if (socketData.type === "socketuserId") {
+            Cookies.set("socketuserId", socketData.data);
+          }
         };
-      });
+      };
     };
     socketConnect();
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        socketConnect();
+      }
+    });
   }, []); // Run this effect only once on component mount
 
   const resetCrashTemporary = () => {
@@ -286,56 +323,71 @@ const Crash = ({
   //   return socket;
   return (
     <>
-      <div className=" w-full h-[200px] md:h-[300px] relative">
-        <div className="w-full h-full">
+      <div className="container">
+        <div className="absolute w-[fit-content] h-[200px]">
           <AnimeLeft />
           <AnimeBottom />
-          <div
-            id="connectionMsg"
-            className="absolute top-0 left-[50%] translate-x-[-50%]"
-          >
-            Connecting
-          </div>
-          <div className="absolute z-40 right-12 bottom-12">
-            <span id="counterBox" className="hidden text-4xl"></span>
-          </div>
-          <div className="absolute z-20 left-[50%] bottom-[50%] translate-x-[-50%] translate-y-[-50%]">
-            <span
-              id="crashedBox"
-              className="text-1xl md:text-2xl lg:text-4xl hidden"
-            >
-              Crashed {crashNumber}x
-            </span>
-          </div>
-
-          <div id="animatePlane" className="absolute z-10 hidden max-w-[100px]">
-            <img className="w-100%" src={fly} />
-          </div>
-          <div id="blast" className="h-[50px] w-[50px] absolute hidden">
-            <Blast ref={blastRef} />
-          </div>
-          <svg
-            id="svg"
-            className="absolute z-4 hidden bottom-0 left-0 w-full h-[100%]"
-          >
-            <line
-              id="line"
-              className="stroke-2 stroke-cyan-500"
-              x1="0"
-              y1="100%"
-              x2="0"
-              y2="0"
-            ></line>
-          </svg>
-
-          <div className="absolute z-50 right-12 bottom-12 text-2xl">
-            {crashed ? (
-              <div className="countdown font-mono text-6xl">
-                <span style={{ "--value": timer }}></span>
+        </div>
+        <div className="h-[200px] relative ml-[10px] overflow-hidden">
+          <div className="w-full h-full  ">
+            <div className=" ">
+              <div id="bgsky" className="absolute bgsky">
+                <img className="w-full h-full" src={bgsky} />
               </div>
-            ) : (
-              <></>
-            )}
+            </div>
+
+            <div
+              id="connectionMsg"
+              className="absolute top-0 left-[50%] translate-x-[-50%]"
+            >
+              Connecting...
+            </div>
+            <div className="absolute z-40 right-12 bottom-12">
+              <span id="counterBox" className="hidden text-4xl"></span>
+            </div>
+            <div className="absolute z-20 left-[50%] bottom-[50%] translate-x-[-50%] translate-y-[-50%]">
+              <span
+                id="crashedBox"
+                className="text-1xl md:text-2xl lg:text-4xl hidden"
+              >
+                Crashed {crashNumber}x
+              </span>
+            </div>
+
+            <div id="animateBox" className="absolute z-10">
+              <div
+                id="animatePlane"
+                className="hidden h-[50px] w-[50px] max-w-[100px]"
+              >
+                <img className="w-[100%]" src={fly} />
+              </div>
+              <div id="blast" className="hidden">
+                <img className="w-24" src={blastImg} />
+              </div>
+            </div>
+            <svg
+              id="svg"
+              className="absolute z-4 hidden bottom-0 left-0 w-full h-[100%]"
+            >
+              <line
+                id="line"
+                className="stroke-2 stroke-cyan-500"
+                x1="0"
+                y1="110%"
+                x2="0"
+                y2="0"
+              ></line>
+            </svg>
+
+            <div className="absolute z-50 right-12 bottom-12 text-2xl">
+              {crashed ? (
+                <div className="countdown font-mono text-6xl">
+                  <span style={{ "--value": timer }}></span>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         </div>
       </div>

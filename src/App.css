@@ -4,11 +4,42 @@
 
 @import "tailwindcss/utilities";
 
+@keyframes bgsky {
+  0% {
+    transform: translate(0%, -50%);
+  }
+  25% {
+    transform: translate(-10%, 0%);
+  }
+  50% {
+    transform: translate(-20%, -50%);
+  }
+  75% {
+    transform: translate(-50%, 0%);
+  }
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+.bgsky {
+  animation-duration: 50s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  height: 1000px;
+  width: 2000px;
+  transform: translateY(-50%);
+}
+
+.bgskyAnimate {
+  animation-name: bgsky;
+}
+
 @keyframes animate-plane {
   0% {
     left: 0;
     bottom: 0;
-    width: 3rem;
   }
   25% {
     bottom: 20%;
@@ -22,7 +53,6 @@
   100% {
     left: 70%;
     bottom: 70%;
-    width: 4rem;
   }
 }
 
@@ -64,11 +94,11 @@
   opacity: 1; /* Initially set opacity to 0 */
   border-radius: 50%;
   position: relative;
-  margin-left: 60px;
 }
 .animated-divs-2 {
   overflow: hidden;
   display: flex;
+  gap: 60px;
   flex-wrap: wrap;
 }
 @keyframes moveLeft {

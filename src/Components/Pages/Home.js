@@ -80,7 +80,7 @@ const Home = () => {
             onClick={soundController}
           />
         </div>
-        <div className="max-w-lg m-auto">
+        <div className="max-w-lg m-auto relative">
           <Crash
             setCrashNumber={setCrashNumber}
             crashNumber={crashNumber}

@@ -80,6 +80,7 @@ const Crash = ({
       },
       { once: true }
     );
+
     const animateBox = document.getElementById("animateBox");
     const animatePlane = document.getElementById("animatePlane");
     const counterBox = document.getElementById("counterBox");
@@ -175,6 +176,7 @@ const Crash = ({
           }
 
           if (socketData.type === "crashed") {
+            styleButton("cashout", "disabled");
             setCrashed(socketData.crashed);
             animateBox.style.animationPlayState = "paused";
             animatePlane.classList.add("hidden");

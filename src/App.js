@@ -9,6 +9,7 @@ import Register from "./Components/Pages/Register";
 import Cookies from "js-cookie";
 import Deposit from "./Components/Pages/Deposit";
 import Withdraw from "./Components/Pages/Withdraw";
+import GameHistory from "./Components/Pages/GameHistory";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <>
             <Route path="deposit" element={<Deposit />} />
             <Route path="withdraw" element={<Withdraw />} />
+            <Route path="game-history" element={<GameHistory />} />
           </>
         ) : (
           <>

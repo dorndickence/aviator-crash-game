@@ -9,12 +9,8 @@ const WithdrawHistory = () => {
       return `<span class="badge badge-warning">Waiting</span>`;
     } else if (sts === "finished") {
       return `<span class="badge badge-primary">Completed</span>`;
-    } else if (sts === "expired") {
-      return `<span class="badge badge-error">Expired</span>`;
     } else if (sts === "failed") {
       return `<span class="badge badge-secondary">Failed</span>`;
-    } else if (sts === "partially_paid") {
-      return `<span class="badge badge-accent">Partially Paid</span>`;
     } else {
       return `<span class="badge badge-info">Processing</span>`;
     }

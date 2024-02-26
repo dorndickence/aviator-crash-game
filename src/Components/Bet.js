@@ -46,9 +46,16 @@ const Bet = ({
   };
   const bet = (e) => {
     let errorMsg = document.getElementById("errorMsg");
+    const currency = Cookies.get("currency");
+    if (currency === undefined) {
+      setAlert({ message: "Currency is not updated", success: false });
+      return;
+    }
     if (!loginValidation()) {
       return;
     }
+
+    const cm = document.querySelectorAll(`.${currency}`);
 
     if (amount > 0) {
       axios
@@ -56,15 +63,23 @@ const Bet = ({
           amount: amount,
           socketuserId: Cookies.get("socketuserId"),
           token: Cookies.get("token"),
+          currency: currency,
         })
         .then((data) => {
           if (data.status === 200) {
             setAlert(data.data);
             // e.target.setAttribute("disabled", true);
             styleButton("bet", "disable");
+
+            cm.forEach((c) => {
+              c.innerText = (
+                parseFloat(c.innerText) - parseFloat(amount)
+              ).toFixed(8);
+            });
           }
         })
         .catch((error) => {
+          console.log(error);
           setAlert(error.response.data);
         });
     } else {
@@ -77,19 +92,34 @@ const Bet = ({
     }
   };
   const cashout = (e) => {
+    const currency = Cookies.get("currency");
+    if (currency === undefined) {
+      setAlert({ message: "Currency is not updated", success: false });
+      return;
+    }
+
     if (!loginValidation()) {
       return;
     }
+
+    const cm = document.querySelectorAll(`.${currency}`);
+
     axios
       .post(`${process.env.REACT_APP_API_URL}cashout`, {
         amount: amount,
         socketuserId: Cookies.get("socketuserId"),
         token: Cookies.get("token"),
+        currency: currency,
       })
       .then((data) => {
         if (data.status === 200) {
           setAlert(data.data);
           setCashoutBtn(false);
+          cm.forEach((c) => {
+            c.innerText = (
+              parseFloat(c.innerText) + parseFloat(data.data.amount)
+            ).toFixed(8);
+          });
         }
       })
       .catch((error) => {

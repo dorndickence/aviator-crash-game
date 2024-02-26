@@ -4,6 +4,7 @@ import trx from "../../images/trx.svg";
 import dai from "../../images/dai.svg";
 import { useState } from "react";
 import Cookies from "js-cookie";
+import DepositHistory from "./DepositHistory";
 const Deposit = () => {
   // axios(config)
   //   .then(function (response) {
@@ -13,6 +14,7 @@ const Deposit = () => {
   //     console.log(error);
   //   });
   const [coinIndex, setCoinIndex] = useState(0);
+  const [depositId, setDepositId] = useState("");
 
   const copy = (e) => {
     const addressBox = document.getElementById("addressBox");
@@ -75,6 +77,7 @@ const Deposit = () => {
         coin: network,
       })
       .then((data) => {
+        setDepositId(data.data.depositId);
         document.getElementById("my_modal_1").showModal();
         document.getElementById("address").innerText = data.data.data;
         setTimeout(() => {
@@ -93,6 +96,27 @@ const Deposit = () => {
           button.classList.remove("hidden");
           buttonWait.classList.add("hidden");
         }, 300);
+      });
+  };
+
+  const checkPayment = (e) => {
+    e.target.innerText = "Please wait";
+    axios
+      .post(`${process.env.REACT_APP_API_URL}checkDeposit`, {
+        token: Cookies.get("token"),
+        depositId: depositId,
+      })
+      .then((data) => {
+        e.target.innerText = "Check For payment";
+        document.getElementById("deposistForm").classList.add("hidden");
+        document.getElementById("success").classList.remove("hidden");
+      })
+      .catch((error) => {
+        e.target.innerText = "Check For payment";
+        document.getElementById("errormhg").classList.remove("hidden");
+        setTimeout(() => {
+          document.getElementById("errormhg").classList.add("hidden");
+        }, 5000);
       });
   };
 
@@ -156,67 +180,107 @@ const Deposit = () => {
                 </form>
               </div>
             </div>
-            <p className="py-4 text-sm text-rose-300">
-              Select network{" "}
-              <span className="text-red-400 font-bold">
-                {coins[coinIndex].payNetwork.toUpperCase()}
-              </span>
-              . Sending to other network may result in loss
-            </p>
+            <div id="deposistForm">
+              <p className="py-4 text-sm text-rose-300">
+                Select network{" "}
+                <span className="text-red-400 font-bold">
+                  {coins[coinIndex].payNetwork.toUpperCase()}
+                </span>
+                . Sending to other network may result in loss
+              </p>
 
-            <div className="space-y-6">
-              <div
-                id="addressBox"
-                className="flex justify-center"
-                onClick={copy}
-              >
-                <p
-                  id="address"
-                  className="overflow-ellipsis overflow-hidden  mr-2 text-xs sm:text-base"
-                ></p>
-                <p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75"
-                    />
-                  </svg>
+              <div className="space-y-6">
+                <div
+                  id="addressBox"
+                  className="flex justify-center"
+                  onClick={copy}
+                >
+                  <p
+                    id="address"
+                    className="overflow-ellipsis overflow-hidden  mr-2 text-xs sm:text-base"
+                  ></p>
+                  <p>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75"
+                      />
+                    </svg>
+                  </p>
+                </div>
+                <img
+                  className="mx-auto"
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${coins[coinIndex].name}`}
+                />
+              </div>
+
+              <div className="py-6">
+                <p className="py-4 text-sm text-rose-300">
+                  <span className="font-bold text-rose-500">
+                    Warning for multiple deposit:{" "}
+                  </span>
+                  Please refrain from sending multiple deposits to the same
+                  address. Our system processes only one deposit per account
+                  address. Once your deposit is completed, a new address will be
+                  generated for any subsequent deposits. Sending multiple
+                  deposits to the same address may result in loss.
+                </p>
+                <p className="py-4 text-sm text-green-300">
+                  <span className="font-bold  text-green-500">
+                    Hint for multiple deposit:{" "}
+                  </span>
+                  Please make your deposit once and wait for it to reflect in
+                  your account balance before depositing again. Once the deposit
+                  has been processed, you can revisit this page to make another
+                  deposit. Thank you for your cooperation.
                 </p>
               </div>
-              <img
-                className="mx-auto"
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${coins[coinIndex].name}`}
-              />
-            </div>
 
-            <div className="py-6">
-              <p className="py-4 text-sm text-rose-300">
-                <span className="font-bold text-rose-500">
-                  Warning for multiple deposit:{" "}
-                </span>
-                Please refrain from sending multiple deposits to the same
-                address. Our system processes only one deposit per account
-                address. Once your deposit is completed, a new address will be
-                generated for any subsequent deposits. Sending multiple deposits
-                to the same address may result in loss.
-              </p>
-              <p className="py-4 text-sm text-green-300">
-                <span className="font-bold  text-green-500">
-                  Hint for multiple deposit:{" "}
-                </span>
-                Please make your deposit once and wait for it to reflect in your
-                account balance before depositing again. Once the deposit has
-                been processed, you can revisit this page to make another
-                deposit. Thank you for your cooperation.
-              </p>
+              <div>
+                <div id="errormhg" className="text-center hidden">
+                  <span className="badge badge-error">
+                    We still did not received your deposit
+                  </span>
+                </div>
+                <div>
+                  <button
+                    onClick={checkPayment}
+                    className="btn btn-primary w-full"
+                  >
+                    Check for payment
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div id="succcess" className="hidden">
+              <div className="">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-32 h-32 text-green-400 mx-auto"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+              </div>
+              <div className="text-center">
+                Withdraw request sent. Please wait for the payout to be proceed.
+                Payout processing average time 1 hour and maximum 24 hours.
+              </div>
             </div>
           </div>
         </dialog>
@@ -225,6 +289,7 @@ const Deposit = () => {
             <span>deposit unavailable.</span>
           </div>
         </div>
+        <DepositHistory />
       </div>
     </>
   );

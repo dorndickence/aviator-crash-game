@@ -54,6 +54,7 @@ const Bet = ({
       axios
         .post(`${process.env.REACT_APP_API_URL}bet`, {
           amount: amount,
+          socketuserId: Cookies.get("socketuserId"),
           token: Cookies.get("token"),
         })
         .then((data) => {
@@ -82,6 +83,7 @@ const Bet = ({
     axios
       .post(`${process.env.REACT_APP_API_URL}cashout`, {
         amount: amount,
+        socketuserId: Cookies.get("socketuserId"),
         token: Cookies.get("token"),
       })
       .then((data) => {

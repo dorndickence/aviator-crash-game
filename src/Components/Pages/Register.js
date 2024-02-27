@@ -30,6 +30,16 @@ const Register = () => {
             empty++;
           }
         }
+
+        if (input.placeholder.toLowerCase() === "password") {
+          if (input.value.length < 8) {
+            const msg = document.createElement("div");
+            msg.innerText = `${input.placeholder} must be 8 characters`;
+            msg.classList.add("text-red-300");
+            msgfire.appendChild(msg);
+            empty++;
+          }
+        }
       }
     });
     return empty;

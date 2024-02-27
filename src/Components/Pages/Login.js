@@ -21,9 +21,9 @@ const Login = () => {
             msg.classList.add("text-green-300");
             msgfire.appendChild(msg);
             Cookies.set("token", data.data.data.token);
-            // setTimeout(() => {
-            //   window.location.replace("./");
-            // }, 2000);
+            setTimeout(() => {
+              window.location.replace("./");
+            }, 2000);
           } else {
             const msg = document.createElement("div");
             msg.innerText = `Something went wrong #${data.status}`;
@@ -69,11 +69,11 @@ const Login = () => {
             <div className="card-body">
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Email</span>
+                  <span className="label-text">Private Username</span>
                 </label>
                 <input
-                  type="email"
-                  placeholder="email"
+                  type="text"
+                  placeholder="username"
                   className="input input-bordered"
                   required
                 />

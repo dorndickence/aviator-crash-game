@@ -214,7 +214,7 @@ const Bet = ({
           </div>
         </div>
       </div>
-      <div className="py-6">
+      <div className="py-6 min-h-[300px]">
         <div className="overflow-y-auto">
           <table className="table  text-center">
             {/* head */}

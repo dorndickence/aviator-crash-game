@@ -12,7 +12,8 @@ import Withdraw from "./Components/Pages/Withdraw";
 import GameHistory from "./Components/Pages/GameHistory";
 import Logout from "./Components/Pages/Logout";
 import Logout2 from "./Components/Pages/Logout2";
-
+import Contact from "./Components/Pages/Contact";
+import Password from "./Components/Pages/Password";
 function App() {
   const currentPath = window.location.pathname;
 
@@ -33,9 +34,10 @@ function App() {
             <Route path="logout" element={<Logout2 />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route path="password-recovery" element={<Password />} />
           </>
         )}
-
+        <Route path="contact" element={<Contact />} />
         {/* <Route path="*" element={<NoPage />} /> */}
       </Routes>
       {currentPath !== "/logout" && <Footer />}

@@ -42,23 +42,23 @@
     bottom: 0;
   }
   25% {
-    bottom: 20%;
-  }
-  50% {
     bottom: 10%;
   }
-  75% {
+  50% {
     bottom: 20%;
   }
+  75% {
+    bottom: 40%;
+  }
   100% {
-    left: 70%;
+    left: 80%;
     bottom: 70%;
   }
 }
 
 .animate-plane {
   animation-name: animate-plane;
-  animation-duration: 15s;
+  animation-duration: 30s;
   animation-iteration-count: 1;
   animation-timing-function: ease-in;
   animation-fill-mode: forwards;

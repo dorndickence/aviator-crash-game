@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import fly from "../../images/fly.png";
 const Header = () => {
   const [balances, setBalances] = useState([]);
   const getBalanceMethod = (currency, amount) => {
@@ -123,13 +124,18 @@ const Header = () => {
                   <li>
                     <a href="./game-history">Crash Logs</a>
                   </li>
+                  <li>
+                    <a href="./logout">Logout</a>
+                  </li>
                 </ul>
               </div>
             </>
           ) : (
             <></>
           )}
-          <a className="btn btn-ghost text-xl">daisyUI</a>
+          <a href="./" className="btn btn-ghost text-xl">
+            Crypto Crash <img src={fly} width="30" />
+          </a>
         </div>
         {Cookies.get("token") ? (
           <>
@@ -146,6 +152,9 @@ const Header = () => {
                 <li>
                   <a href="./game-history">Crash Logs</a>
                 </li>
+                <li>
+                  <a href="./logout">Logout</a>
+                </li>
               </ul>
             </div>
           </>
@@ -153,7 +162,7 @@ const Header = () => {
           <></>
         )}
         <div className="navbar-end">
-          <div className="flex gap-5">
+          <div className="flex gap-3 mr-5">
             {Cookies.get("token") ? (
               <>
                 {/* <div className="gap-5 hidden md:flex">
@@ -212,10 +221,10 @@ const Header = () => {
               </>
             ) : (
               <>
-                <a href="./login" className="btn glass">
+                <a href="./login" className="link link-hover">
                   Login
                 </a>
-                <a href="./register" className="btn glass">
+                <a href="./register" className="link link-hover">
                   Register
                 </a>
               </>

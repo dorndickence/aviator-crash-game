@@ -92,6 +92,7 @@ const Crash = ({
     const crashSound = new Audio(crashSoundSrc);
     const crashedSound = new Audio(crashedSoundSrc);
     const crashedBox = document.getElementById("crashedBox");
+    const placeBetBox = document.getElementById("placeBetBox");
     const connectionMsg = document.getElementById("connectionMsg");
     //in bet.js
     const betRow = document.getElementById("betRow");
@@ -153,6 +154,10 @@ const Crash = ({
             updateLine();
 
             if (!initGame && timer === "0") {
+              line.setAttribute("x2", 0);
+              line.setAttribute("y2", 0);
+              clockSound.pause();
+              clockSound.currentTime = 0;
               animateBox.classList.add("animate-plane");
               animateBox.style.animationPlayState = "running";
               animatePlane.classList.remove("hidden");
@@ -177,6 +182,7 @@ const Crash = ({
 
           if (socketData.type === "crashed") {
             styleButton("cashout", "disabled");
+
             setCrashed(socketData.crashed);
             animateBox.style.animationPlayState = "paused";
             animatePlane.classList.add("hidden");
@@ -211,6 +217,7 @@ const Crash = ({
               animateBox.classList.remove("animate-plane");
               crashedBox.classList.add("hidden");
               bgsky.classList.remove("bgskyAnimate");
+              placeBetBox.classList.remove("hidden");
               // callBlastFunction("reset");
               setAlert(false);
               betRow.innerHTML = "";
@@ -224,6 +231,8 @@ const Crash = ({
             }
 
             if (socketData.timer === 10) {
+              placeBetBox.classList.add("hidden");
+
               styleButton("bet", "disable");
               if (userInteraction) {
                 if (Cookies.get("sound")) {
@@ -325,7 +334,7 @@ const Crash = ({
   //   return socket;
   return (
     <>
-      <div className="container">
+      <div className="container ">
         <div className="absolute w-[fit-content] h-[200px]">
           <AnimeLeft />
           <AnimeBottom />
@@ -354,6 +363,12 @@ const Crash = ({
               >
                 Crashed {crashNumber}x
               </span>
+              <span
+                id="placeBetBox"
+                className="text-1xl  text-white md:text-2xl lg:text-4xl hidden"
+              >
+                Place Your Bet
+              </span>
             </div>
 
             <div id="animateBox" className="absolute z-10">
@@ -373,16 +388,16 @@ const Crash = ({
             >
               <line
                 id="line"
-                className="stroke-2 stroke-cyan-500"
+                className="stroke-2 stroke-yellow-500"
                 x1="0"
-                y1="110%"
+                y1="105%"
                 x2="0"
                 y2="0"
               ></line>
             </svg>
 
             <div className="absolute z-50 right-12 bottom-12 text-2xl">
-              {crashed ? (
+              {crashed && timer < 11 ? (
                 <div className="countdown font-mono text-6xl">
                   <span style={{ "--value": timer }}></span>
                 </div>

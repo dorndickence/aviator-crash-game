@@ -80,40 +80,44 @@ const Home = () => {
             onClick={soundController}
           />
         </div>
-        <div className="max-w-lg m-auto relative">
-          <Crash
-            setCrashNumber={setCrashNumber}
-            crashNumber={crashNumber}
-            crashed={crashed}
-            setCrashed={setCrashed}
-            setAlert={setAlert}
-            setCashoutBtn={setCashoutBtn}
-            timer={timer}
-            setTimer={setTimer}
-            setBets={setBets}
-            setWinnings={setWinnings}
-            setPlayers={setPlayers}
-            winnings={winnings}
-            bets={bets}
-            players={players}
-            styleButton={styleButton}
-          />
-          <Bet
-            crashNumber={crashNumber}
-            crashed={crashed}
-            alert={alert}
-            setAlert={setAlert}
-            cashoutBtn={cashoutBtn}
-            setCashoutBtn={setCashoutBtn}
-            timer={timer}
-            winnings={winnings}
-            bets={bets}
-            players={players}
-            setBets={setBets}
-            setWinnings={setWinnings}
-            setPlayers={setPlayers}
-            styleButton={styleButton}
-          />
+        <div className="max-w-lg m-auto relative ">
+          <div>
+            <Crash
+              setCrashNumber={setCrashNumber}
+              crashNumber={crashNumber}
+              crashed={crashed}
+              setCrashed={setCrashed}
+              setAlert={setAlert}
+              setCashoutBtn={setCashoutBtn}
+              timer={timer}
+              setTimer={setTimer}
+              setBets={setBets}
+              setWinnings={setWinnings}
+              setPlayers={setPlayers}
+              winnings={winnings}
+              bets={bets}
+              players={players}
+              styleButton={styleButton}
+            />
+          </div>
+          <div className="px-3 sm:px-0">
+            <Bet
+              crashNumber={crashNumber}
+              crashed={crashed}
+              alert={alert}
+              setAlert={setAlert}
+              cashoutBtn={cashoutBtn}
+              setCashoutBtn={setCashoutBtn}
+              timer={timer}
+              winnings={winnings}
+              bets={bets}
+              players={players}
+              setBets={setBets}
+              setWinnings={setWinnings}
+              setPlayers={setPlayers}
+              styleButton={styleButton}
+            />
+          </div>
         </div>
       </div>
     </>

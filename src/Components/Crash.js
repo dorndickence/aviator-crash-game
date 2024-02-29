@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 // import io from "socket.io-client";
-import { Decimal } from "decimal.js";
 import CryptoJS from "crypto-js";
 import fly from "../images/fly.png";
 import blastImg from "../images/blast.png";
@@ -17,15 +16,11 @@ const Crash = ({
   crashed,
   setCrashed,
   setAlert,
-  setCashoutBtn,
   timer,
   setTimer,
   setBets,
   setWinnings,
   setPlayers,
-  bets,
-  winnings,
-  players,
   styleButton,
 }) => {
   // const socket = io("ws://localhost:3001");

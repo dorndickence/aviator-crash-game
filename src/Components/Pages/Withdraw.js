@@ -146,7 +146,7 @@ const Withdraw = () => {
                 <span className="font-bold"> Amount:</span>
                 <input
                   id="amount"
-                  type="text"
+                  type="number"
                   className="grow"
                   placeholder="0 - 10000"
                 />
@@ -165,7 +165,7 @@ const Withdraw = () => {
                 Request
               </button>
             </div>
-            <div id="succcess" className="hidden">
+            <div id="success" className="hidden">
               <div className="">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -2,7 +2,6 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./Components/Pages/Home";
 import Header from "./Components/Pages/Header";
-import Blast from "./Components/Blast";
 import Footer from "./Components/Pages/Footer";
 import Login from "./Components/Pages/Login";
 import Register from "./Components/Pages/Register";
@@ -14,8 +13,17 @@ import Logout from "./Components/Pages/Logout";
 import Logout2 from "./Components/Pages/Logout2";
 import Contact from "./Components/Pages/Contact";
 import Password from "./Components/Pages/Password";
+
 function App() {
   const currentPath = window.location.pathname;
+
+  const play = currentPath.split("/");
+
+  if (play[1] === "play") {
+    Cookies.set("partner", play[2]);
+    window.location.replace("../");
+    return;
+  }
 
   return (
     <BrowserRouter>

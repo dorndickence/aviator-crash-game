@@ -1,6 +1,3 @@
-import Cookies from "js-cookie";
-import { useEffect } from "react";
-
 const Logout = () => {
   return (
     <>

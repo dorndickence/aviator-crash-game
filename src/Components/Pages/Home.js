@@ -1,4 +1,3 @@
-import Graph from "./Graph";
 import Crash from "../Crash";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";

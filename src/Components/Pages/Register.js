@@ -1,10 +1,11 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 const Register = () => {
   //validation method
   const validation = async (inputs, msgfire) => {
     let empty = 0;
     await inputs.forEach((input) => {
-      if (!input.value) {
+      if (!input.value && input.placeholder !== "Promo Code") {
         const msg = document.createElement("div");
         msg.innerText = `${input.placeholder} is required`;
         msg.classList.add("text-red-300");
@@ -49,12 +50,22 @@ const Register = () => {
     const inputs = document.querySelectorAll("input");
     const msgfire = document.getElementById("msgfire");
     msgfire.innerHTML = "";
+    const promoObject = {
+      code: inputs[4].value,
+      type: "promo",
+    };
+
+    if (Cookies.get("partner")) {
+      promoObject.code = Cookies.get("partner");
+      promoObject.type = "partnerId";
+    }
 
     const userData = {
       publicUsername: inputs[0].value,
       privateUsername: inputs[1].value,
       email: inputs[2].value,
       password: inputs[3].value,
+      promo: promoObject,
     };
 
     const erorrs = await validation(inputs, msgfire);
@@ -167,6 +178,20 @@ const Register = () => {
                   required
                 />
               </div>
+              {!Cookies.get("partner") ? (
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Promo</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Promo Code"
+                    className="input input-bordered"
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
               <label
                 id="msgfire"
                 className="label text-xs flex items-start flex-col"

@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
-import Crash from "./Crash";
 import axios from "axios";
 import Cookies from "js-cookie";
 
 const Bet = ({
-  crashNumber,
-  crashed,
   alert,
   setAlert,
-  cashoutBtn,
   setCashoutBtn,
-  timer,
   bets,
   winnings,
   players,

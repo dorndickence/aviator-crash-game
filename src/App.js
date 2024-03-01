@@ -13,6 +13,7 @@ import Logout from "./Components/Pages/Logout";
 import Logout2 from "./Components/Pages/Logout2";
 import Contact from "./Components/Pages/Contact";
 import Password from "./Components/Pages/Password";
+import Table from "./Components/Pages/Table";
 
 function App() {
   const currentPath = window.location.pathname;
@@ -46,6 +47,7 @@ function App() {
           </>
         )}
         <Route path="contact" element={<Contact />} />
+        <Route path="table" element={<Table />} />
         {/* <Route path="*" element={<NoPage />} /> */}
       </Routes>
       {currentPath !== "/logout" && <Footer />}

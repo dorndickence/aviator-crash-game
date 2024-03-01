@@ -29,6 +29,27 @@ const Crash = ({
   // const [counter, setCounter] = useState("");
 
   //animation
+  const sortTable = (columnIndex) => {
+    const table = document.getElementById("myTable");
+    const tbody = table.querySelector("tbody");
+    const rows = Array.from(tbody.getElementsByTagName("tr"));
+    const isNumeric = !isNaN(
+      parseFloat(rows[0].getElementsByTagName("td")[columnIndex].innerText)
+    );
+
+    rows.sort((a, b) => {
+      const aValue = isNumeric
+        ? parseFloat(a.getElementsByTagName("td")[columnIndex].innerText)
+        : a.getElementsByTagName("td")[columnIndex].innerText.toLowerCase();
+      const bValue = isNumeric
+        ? parseFloat(b.getElementsByTagName("td")[columnIndex].innerText)
+        : b.getElementsByTagName("td")[columnIndex].innerText.toLowerCase();
+      return aValue > bValue ? 1 : -1;
+    });
+
+    tbody.innerHTML = "";
+    rows.forEach((row) => tbody.appendChild(row));
+  };
 
   const animateBottom = () => {
     const aniteBot = document.querySelectorAll(".animated-divs-2 div");
@@ -255,15 +276,37 @@ const Crash = ({
             newBewRow.appendChild(newbetRowTdForOdds);
             newBewRow.appendChild(newbetRowTdForAmount);
             newBewRow.appendChild(newbetRowTdForWin);
-            betRow.appendChild(newBewRow);
+
             // setBetData(socketData.betData);
+
+            let inserted = false;
+
+            for (let i = 0; i < betRow.childNodes.length; i++) {
+              if (
+                parseFloat(betRow.childNodes[i].childNodes[2].innerText) <
+                  parseFloat(socketData.betData.amount) &&
+                !inserted
+              ) {
+                betRow.insertBefore(newBewRow, betRow.childNodes[i]);
+                inserted = true;
+                console.log("insert");
+                break;
+              }
+            }
+
+            if (!inserted) {
+              console.log("append");
+              betRow.appendChild(newBewRow);
+            }
 
             totalPlayers.innerText = parseInt(totalPlayers.innerText) + 1;
 
             totalBets.innerText =
               parseInt(totalBets.innerText) +
               parseFloat(socketData.betData.amount);
+          }
 
+          if (socketData.type === "notifyBetPlaced") {
             if (Cookies.get("token")) {
               if (socketData.betData.token === Cookies.get("token")) {
                 setTimeout(() => {
@@ -280,10 +323,13 @@ const Crash = ({
             winElement.childNodes[3].innerText = socketData.amount;
             winElement.childNodes[1].innerText = `${socketData.odds}x`;
 
-            totalWinnings.innerText = (
-              parseInt(totalWinnings.innerText) + parseFloat(socketData.amount)
+            totalWinnings.innerText = parseFloat(
+              parseFloat(totalWinnings.innerText) +
+                parseFloat(socketData.amount)
             ).toFixed(2);
+          }
 
+          if (socketData.type === "notifyBetWon") {
             if (Cookies.get("token")) {
               if (socketData.token === Cookies.get("token")) {
                 styleButton("cashout", "disabled");
@@ -304,6 +350,11 @@ const Crash = ({
         socketConnect();
       }
     });
+
+    return () => {
+      // Close WebSocket connection
+      socket.close();
+    };
   }, []); // Run this effect only once on component mount
 
   const resetCrashTemporary = () => {

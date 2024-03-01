@@ -128,7 +128,12 @@ const Bet = ({
         token: Cookies.get("token"),
       })
       .then((data) => {
-        setBetData(data.data.data.livebets);
+        setBetData(
+          data.data.data.livebets.sort(
+            (a, b) => b.amount.$numberDecimal - a.amount.$numberDecimal
+          )
+        );
+
         setBets(data.data.data.bets);
         setPlayers(data.data.data.players);
         setWinnings(data.data.data.winnings);
@@ -211,7 +216,7 @@ const Bet = ({
       </div>
       <div className="py-6 min-h-[300px]">
         <div className="overflow-y-auto">
-          <table className="table  text-center">
+          <table id="myTable" className="table  text-center">
             {/* head */}
             <thead>
               <tr>

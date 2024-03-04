@@ -2,6 +2,7 @@ import axios from "axios";
 import usdttrc20 from "../../images/usdttrc20.svg";
 import trx from "../../images/trx.svg";
 import dai from "../../images/dai.svg";
+import sol from "../../images/sol.svg";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import DepositHistory from "./DepositHistory";
@@ -61,6 +62,15 @@ const Deposit = () => {
       colorName: "cyan",
       payNetwork: "Erc20",
     },
+    {
+      name: "SOL",
+      symbol: "sol",
+      image: sol,
+      fullName: "SOLANA",
+      network: "SOLANA",
+      colorName: "cyan",
+      payNetwork: "SOLANA",
+    },
   ];
 
   const deposit = (network, coinIndex) => {
@@ -80,6 +90,7 @@ const Deposit = () => {
         setDepositId(data.data.depositId);
         document.getElementById("my_modal_1").showModal();
         document.getElementById("address").innerText = data.data.data;
+        document.getElementById("minimumDeposit").innerText = data.data.minimum;
         setTimeout(() => {
           button.classList.remove("hidden");
           buttonWait.classList.add("hidden");
@@ -188,6 +199,9 @@ const Deposit = () => {
                 </span>
                 . Sending to other network may result in loss
               </p>
+              <p>
+                Minimum: <span id="minimumDeposit">1</span>
+              </p>
 
               <div className="space-y-6">
                 <div
@@ -284,12 +298,17 @@ const Deposit = () => {
             </div>
           </div>
         </dialog>
-        <div id="errorSG" className="hidden toast toast-center toast-middle">
+        <div
+          id="errorSG"
+          className="hidden z-50 toast toast-center toast-middle"
+        >
           <div className="alert alert-error">
             <span>deposit unavailable.</span>
           </div>
         </div>
-        <DepositHistory />
+        <div>
+          <DepositHistory />
+        </div>
       </div>
     </>
   );

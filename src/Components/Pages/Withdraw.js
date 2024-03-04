@@ -2,6 +2,7 @@ import axios from "axios";
 import usdttrc20 from "../../images/usdttrc20.svg";
 import trx from "../../images/trx.svg";
 import dai from "../../images/dai.svg";
+import sol from "../../images/sol.svg";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import WithdrawHistory from "./WithdrawHistory";
@@ -42,6 +43,15 @@ const Withdraw = () => {
       network: "ETH",
       colorName: "cyan",
       payNetwork: "Erc20",
+    },
+    {
+      name: "SOL",
+      symbol: "sol",
+      image: sol,
+      fullName: "SOLANA",
+      network: "SOLANA",
+      colorName: "cyan",
+      payNetwork: "SOLANA",
     },
   ];
 
@@ -189,7 +199,10 @@ const Withdraw = () => {
             </div>
           </div>
         </dialog>
-        <div id="errorSG2" className="hidden toast toast-center toast-middle">
+        <div
+          id="errorSG2"
+          className="hidden z-50 toast toast-center toast-middle"
+        >
           <div className="alert alert-error">
             <span>Withdraw temporary unavailable.</span>
           </div>

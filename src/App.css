@@ -146,3 +146,12 @@
     top: 100%;
   }
 } */
+
+#betRow td {
+  padding: 0;
+}
+
+#betRow tr {
+  border: 2px solid;
+  border-color: rgb(49, 47, 47);
+}

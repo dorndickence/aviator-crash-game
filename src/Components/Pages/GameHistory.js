@@ -1,9 +1,19 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-
+import usdttrc20 from "../../images/usdttrc20.svg";
+import trx from "../../images/trx.svg";
+import dai from "../../images/dai.svg";
+import sol from "../../images/sol.svg";
 const GameHistory = () => {
   const [history, setHistory] = useState([]);
+
+  const currencyImage = {
+    usdttrc20: usdttrc20,
+    sol: sol,
+    dai: dai,
+    trx: trx,
+  };
 
   const historyMethod = () => {
     axios
@@ -41,15 +51,25 @@ const GameHistory = () => {
                 <tr
                   className={
                     his.win.$numberDecimal > 0
-                      ? "text-green-500"
-                      : "text-red-500"
+                      ? "bg-green-900 border-green-500 text-white"
+                      : "bg-red-900 border-red-500 text-white"
                   }
                   key={index}
                 >
                   <td>x{his.crash.$numberDecimal}</td>
                   <td>x{his.odds.$numberDecimal}</td>
-                  <td>{his.amount.$numberDecimal}</td>
-                  <td>{his.win.$numberDecimal}</td>
+                  <td>
+                    <div class="flex gap-1 items-center justify-center">
+                      {his.amount.$numberDecimal}{" "}
+                      <img class="w-4" src={currencyImage[his.currency]} />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="flex gap-1 items-center justify-center">
+                      {his.win.$numberDecimal}{" "}
+                      <img class="w-4" src={currencyImage[his.currency]} />
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

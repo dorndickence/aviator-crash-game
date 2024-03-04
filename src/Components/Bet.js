@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import usdttrc20 from "../images/usdttrc20.svg";
+import trx from "../images/trx.svg";
+import dai from "../images/dai.svg";
+import sol from "../images/sol.svg";
 
 const Bet = ({
   alert,
@@ -16,6 +20,14 @@ const Bet = ({
 }) => {
   const [amount, setAmount] = useState(0);
   const [betData, setBetData] = useState([]);
+
+  const currencyImage = {
+    usdttrc20: usdttrc20,
+    sol: sol,
+    dai: dai,
+    trx: trx,
+  };
+
   const loginValidation = () => {
     let errorMsg = document.getElementById("errorMsg");
     if (!Cookies.get("token")) {
@@ -232,14 +244,25 @@ const Bet = ({
                   key={index}
                   className={
                     livedata.win.$numberDecimal > 0
-                      ? `bet${livedata._id} text-green-300`
+                      ? `bet${livedata._id} bg-green-900 border-green-500 text-white`
                       : `bet${livedata._id}`
                   }
                 >
                   <td>{livedata.publicUsername}</td>
                   <td>x{livedata.odds.$numberDecimal}</td>
-                  <td>{livedata.amount.$numberDecimal}</td>
-                  <td>{livedata.win.$numberDecimal}</td>
+                  <td>
+                    <div class="flex gap-1 items-center justify-center">
+                      {livedata.amount.$numberDecimal}{" "}
+                      <img class="w-3" src={currencyImage[livedata.currency]} />
+                    </div>
+                  </td>
+                  <td>
+                    {" "}
+                    <div class="flex gap-1 items-center justify-center">
+                      {livedata.win.$numberDecimal}{" "}
+                      <img class="w-3" src={currencyImage[livedata.currency]} />
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

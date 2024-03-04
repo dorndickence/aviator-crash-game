@@ -10,6 +10,11 @@ import crashedSoundSrc from "../sounds/crashedSound.mp3";
 import AnimeLeft from "./AnimeLeft";
 import AnimeBottom from "./AnimeBottom";
 import bgsky from "../images/bgsky.jpg";
+import usdttrc20 from "../images/usdttrc20.svg";
+import trx from "../images/trx.svg";
+import dai from "../images/dai.svg";
+import sol from "../images/sol.svg";
+
 const Crash = ({
   crashNumber,
   setCrashNumber,
@@ -29,6 +34,12 @@ const Crash = ({
   // const [counter, setCounter] = useState("");
 
   //animation
+  const currencyImage = {
+    usdttrc20: usdttrc20,
+    sol: sol,
+    dai: dai,
+    trx: trx,
+  };
   const sortTable = (columnIndex) => {
     const table = document.getElementById("myTable");
     const tbody = table.querySelector("tbody");
@@ -206,6 +217,7 @@ const Crash = ({
             svg.classList.add("hidden");
             blast.classList.remove("hidden");
             crashedBox.classList.remove("hidden");
+            betRow.classList.add("bg-rose-900", "text-white", "border-red-500");
             setCrashNumber(convert(socketData.crash));
             console.log("hit crashed");
             styleButton("bet", "disable");
@@ -229,6 +241,11 @@ const Crash = ({
           if (socketData.type === "timer") {
             setTimer(socketData.timer);
             if (socketData.timer === 2) {
+              betRow.classList.remove(
+                "bg-rose-900",
+                "text-white",
+                "border-red-500"
+              );
               blast.classList.add("hidden");
               animateBox.classList.remove("animate-plane");
               crashedBox.classList.add("hidden");
@@ -262,13 +279,22 @@ const Crash = ({
 
           if (socketData.type === "betData") {
             const newBewRow = document.createElement("tr");
+
             newBewRow.classList.add(`bet${socketData.betData._id}`);
             const newbetRowTdForUsername = document.createElement("td");
             const newbetRowTdForWin = document.createElement("td");
             const newbetRowTdForOdds = document.createElement("td");
             const newbetRowTdForAmount = document.createElement("td");
-            newbetRowTdForAmount.innerText = socketData.betData.amount;
-            newbetRowTdForWin.innerText = socketData.betData.win;
+            newbetRowTdForAmount.innerHTML = `<div class="flex gap-1 items-center justify-center">${
+              socketData.betData.amount
+            } <img class="w-3"  src=${
+              currencyImage[socketData.betData.currency]
+            }/></div>`;
+            newbetRowTdForWin.innerHTML = `<div class="flex gap-1 items-center justify-center">${
+              socketData.betData.win
+            } <img class="w-3"  src=${
+              currencyImage[socketData.betData.currency]
+            }/></div>`;
             newbetRowTdForOdds.innerText = `x${socketData.betData.odds}`;
             newbetRowTdForUsername.innerText =
               socketData.betData.publicUsername;
@@ -319,8 +345,16 @@ const Crash = ({
           if (socketData.type === "winData") {
             const winElement = document.querySelector(`.bet${socketData._id}`);
 
-            winElement.classList.add("text-green-300");
-            winElement.childNodes[3].innerText = socketData.amount;
+            winElement.classList.add(
+              "text-white",
+              "bg-green-900",
+              "border-green-500"
+            );
+            winElement.childNodes[3].innerHTML = `<div class="flex gap-1 items-center justify-center">${
+              socketData.amount
+            } <img class="w-3"  src=${
+              currencyImage[socketData.currency]
+            }/></div>`;
             winElement.childNodes[1].innerText = `${socketData.odds}x`;
 
             totalWinnings.innerText = parseFloat(

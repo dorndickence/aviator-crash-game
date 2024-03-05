@@ -59,7 +59,7 @@ const Deposit = () => {
       image: dai,
       fullName: "DAI",
       network: "ETH",
-      colorName: "cyan",
+      colorName: "blue",
       payNetwork: "Erc20",
     },
     {
@@ -68,7 +68,7 @@ const Deposit = () => {
       image: sol,
       fullName: "SOLANA",
       network: "SOLANA",
-      colorName: "cyan",
+      colorName: "blueviolet",
       payNetwork: "SOLANA",
     },
   ];
@@ -159,7 +159,8 @@ const Deposit = () => {
                     <div className="text-white flex gap-1 items-center">
                       <h2 className="text-base"> {coin.name}</h2>
                       <p
-                        className={`text-xs bg-${coin.colorName}-700 px-2 rounded-sm`}
+                        className={`text-xs px-2 rounded-sm`}
+                        style={{ backgroundColor: coin.colorName }}
                       >
                         {coin.network}
                       </p>
@@ -179,7 +180,8 @@ const Deposit = () => {
               <div className="text-white flex gap-1 items-center">
                 <h2 className="text-base"> {coins[coinIndex].name}</h2>
                 <p
-                  className={`text-xs bg-${coins[coinIndex].colorName}-500 px-2 rounded-sm`}
+                  style={{ backgroundColor: coins[coinIndex].colorName }}
+                  className={`text-xs px-2 rounded-sm`}
                 >
                   {coins[coinIndex].network}
                 </p>

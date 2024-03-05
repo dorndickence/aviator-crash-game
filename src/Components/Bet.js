@@ -54,15 +54,35 @@ const Bet = ({
   const bet = (e) => {
     let errorMsg = document.getElementById("errorMsg");
     const currency = Cookies.get("currency");
-    if (currency === undefined) {
-      setAlert({ message: "Currency is not updated", success: false });
-      return;
-    }
+
     if (!loginValidation()) {
       return;
     }
 
+    if (currency === undefined) {
+      setAlert({ message: "Currency is not updated", success: false });
+      return;
+    }
+
     const cm = document.querySelectorAll(`.${currency}`);
+
+    if (currency === "sol") {
+      if (amount < 0.01) {
+        const msg = document.createElement("span");
+        msg.classList.add("badge", "badge-error");
+        msg.innerText = "Minimum amount 0.01";
+        errorMsg.appendChild(msg);
+        return;
+      }
+    } else {
+      if (amount < 1) {
+        const msg = document.createElement("span");
+        msg.classList.add("badge", "badge-error");
+        msg.innerText = "Minimum amount 1";
+        errorMsg.appendChild(msg);
+        return;
+      }
+    }
 
     if (amount > 0) {
       axios
@@ -273,7 +293,7 @@ const Bet = ({
         <>
           <div className="toast toast-top toast-center">
             <div className="alert alert-success">
-              <span>{alert.message}</span>
+              <span className="text-xl">{alert.message}</span>
             </div>
           </div>
         </>

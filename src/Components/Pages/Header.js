@@ -2,6 +2,10 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import fly from "../../images/fly.png";
+import usdttrc20 from "../../images/usdttrc20.svg";
+import trx from "../../images/trx.svg";
+import dai from "../../images/dai.svg";
+import sol from "../../images/sol.svg";
 const Header = () => {
   const [balances, setBalances] = useState([]);
   const getBalanceMethod = (currency, amount) => {
@@ -11,13 +15,19 @@ const Header = () => {
     const balanceChange = document.getElementById("balanceChange");
     const amountx = parseFloat(amount.$numberDecimal).toFixed(8);
     balanceChange.innerHTML = ` <div
-    class="bg-primary  cursor-pointer flex gap-2 justify-between "
+    class="bg-primary  cursor-pointer flex gap-1 items-center justify-between "
   >
- 
+  <img class="w-4 h-4" src=${currencyImage[Cookies.get("currency")]}/>
     <span class="${currency}">
       ${amountx}
     </span>
   </div>`;
+  };
+  const currencyImage = {
+    usdttrc20: usdttrc20,
+    sol: sol,
+    dai: dai,
+    trx: trx,
   };
   const getBalance = () => {
     axios
@@ -36,8 +46,11 @@ const Header = () => {
             // console.log(balanceChange);
 
             balanceChange.innerHTML = ` <div
-            class="bg-primary  cursor-pointer flex gap-2 justify-between "
+            class="bg-primary  cursor-pointer flex gap-1 items-center justify-between "
           >
+          <img class="w-4 h-4" src=${
+            currencyImage[Object.keys(data.data.data)[0]]
+          }/>
          
             <span class="${Object.keys(data.data.data)[0]}">
               ${parseFloat(
@@ -57,16 +70,18 @@ const Header = () => {
             const balanceChange = document.getElementById("balanceChange");
 
             balanceChange.innerHTML = ` <div
-            class="bg-primary  cursor-pointer flex gap-2 justify-between "
+            class="bg-primary  cursor-pointer items-center flex gap-1 justify-between "
           >
+          <img class="w-4 h-4" src=${currencyImage[Cookies.get("currency")]}/>
          
             <span class="${Cookies.get("currency")}">
+          
               ${parseFloat(
                 data.data.data[Cookies.get("currency")].$numberDecimal
               ).toFixed(8)}
             </span>
           </div>`;
-          }, 1000);
+          }, 100);
         }
       })
       .catch(() => {
@@ -204,14 +219,19 @@ const Header = () => {
                       >
                         {Object.entries(balances).map(([currency, amount]) => (
                           <div
-                            className="cursor-pointer hover:bg-blue-700 p-3 flex gap-2 justify-between "
+                            className="cursor-pointer hover:bg-blue-700 p-3"
                             onClick={() => getBalanceMethod(currency, amount)}
                             key={currency}
                           >
-                            <span> {currency.toUpperCase()}: </span>
-                            <span className={currency}>
-                              {parseFloat(amount.$numberDecimal).toFixed(8)}
-                            </span>
+                            <div className="flex items-center gap-1  overflow-hidden">
+                              <img
+                                className="w-6"
+                                src={currencyImage[currency]}
+                              />
+                              <span className={currency}>
+                                {parseFloat(amount.$numberDecimal).toFixed(8)}
+                              </span>
+                            </div>
                           </div>
                         ))}
                       </div>

@@ -17,7 +17,7 @@ const Header = () => {
     balanceChange.innerHTML = ` <div
     class="bg-primary  cursor-pointer flex gap-1 items-center justify-between "
   >
-  <img class="w-4 h-4" src=${currencyImage[Cookies.get("currency")]}/>
+  <img class="w-4 h-4" src=${currencyImage[Cookies.get("currency")]}>
     <span class="${currency}">
       ${amountx}
     </span>
@@ -50,7 +50,7 @@ const Header = () => {
           >
           <img class="w-4 h-4" src=${
             currencyImage[Object.keys(data.data.data)[0]]
-          }/>
+          }>
          
             <span class="${Object.keys(data.data.data)[0]}">
               ${parseFloat(
@@ -72,7 +72,7 @@ const Header = () => {
             balanceChange.innerHTML = ` <div
             class="bg-primary  cursor-pointer items-center flex gap-1 justify-between "
           >
-          <img class="w-4 h-4" src=${currencyImage[Cookies.get("currency")]}/>
+          <img class="w-4 h-4" src=${currencyImage[Cookies.get("currency")]}>
          
             <span class="${Cookies.get("currency")}">
           

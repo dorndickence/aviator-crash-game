@@ -309,12 +309,12 @@ const Crash = ({
               socketData.betData.amount
             } <img class="w-3"  src=${
               currencyImage[socketData.betData.currency]
-            }/></div>`;
+            }></div>`;
             newbetRowTdForWin.innerHTML = `<div class="flex gap-1 items-center justify-center">${
               socketData.betData.win
             } <img class="w-3"  src=${
               currencyImage[socketData.betData.currency]
-            }/></div>`;
+            }></div>`;
             newbetRowTdForOdds.innerText = `x${socketData.betData.odds}`;
             newbetRowTdForUsername.innerText =
               socketData.betData.publicUsername;
@@ -374,7 +374,7 @@ const Crash = ({
               socketData.amount
             } <img class="w-3"  src=${
               currencyImage[socketData.currency]
-            }/></div>`;
+            }></div>`;
             winElement.childNodes[1].innerText = `${socketData.odds}x`;
 
             totalWinnings.innerText = parseFloat(

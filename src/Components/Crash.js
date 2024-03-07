@@ -151,7 +151,7 @@ const Crash = ({
       if (clear) {
         clearInterval(setGameInterval);
       } else {
-        counterBox.innerText = starting;
+        counterBox.innerText = starting + "x";
         clearInterval(setGameInterval);
         // console.log(interval);
         setGameInterval = setInterval(() => {
@@ -455,7 +455,7 @@ const Crash = ({
             </div>
             <div className="absolute z-40 right-12 bottom-12">
               <span id="counterBox" className="hidden text-4xl">
-                1.00
+                1.00x
               </span>
             </div>
             <div className="absolute z-20 left-[50%] bottom-[50%] translate-x-[-50%] translate-y-[-50%]">

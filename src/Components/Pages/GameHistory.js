@@ -112,7 +112,7 @@ const GameHistory = () => {
                     className={
                       his.win.$numberDecimal > 0
                         ? "bg-green-900 border-green-500 text-white"
-                        : "bg-red-900 border-red-500 text-white"
+                        : "bg-rose-900 border-rose-500 text-white"
                     }
                     key={index}
                   >
@@ -120,7 +120,7 @@ const GameHistory = () => {
                     <td>x{his.odds.$numberDecimal}</td>
                     <td>
                       <div className="flex gap-1 items-center justify-center">
-                        {his.amount.$numberDecimal}{" "}
+                        {parseFloat(his.amount.$numberDecimal).toFixed(8)}{" "}
                         <img
                           className="w-4"
                           src={currencyImage[his.currency]}
@@ -129,7 +129,7 @@ const GameHistory = () => {
                     </td>
                     <td>
                       <div className="flex gap-1 items-center justify-center">
-                        {his.win.$numberDecimal}{" "}
+                        {parseFloat(his.win.$numberDecimal).toFixed(8)}{" "}
                         <img
                           className="w-4"
                           src={currencyImage[his.currency]}

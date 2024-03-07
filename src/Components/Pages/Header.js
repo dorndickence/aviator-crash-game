@@ -149,7 +149,7 @@ const Header = () => {
             <></>
           )}
           <a href="./" className="btn btn-ghost text-xl">
-            Crypto Crash <img src={fly} width="30" />
+            CrashFly <img src={fly} width="30" />
           </a>
         </div>
         {Cookies.get("token") ? (

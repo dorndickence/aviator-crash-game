@@ -40,6 +40,7 @@ const Crash = ({
     dai: dai,
     trx: trx,
   };
+
   const sortTable = (columnIndex) => {
     const table = document.getElementById("myTable");
     const tbody = table.querySelector("tbody");
@@ -144,10 +145,28 @@ const Crash = ({
     let initGame = false;
     // Subscribe to the 'crash' event
 
+    let setGameInterval;
+
+    const gameRunner = (interval = 120, starting = 1.0, clear = false) => {
+      if (clear) {
+        clearInterval(setGameInterval);
+      } else {
+        counterBox.innerText = starting;
+        clearInterval(setGameInterval);
+        // console.log(interval);
+        setGameInterval = setInterval(() => {
+          counterBox.innerText = convert(
+            parseFloat(counterBox.innerText) + 0.01
+          );
+          updateLine();
+        }, interval);
+      }
+    };
+
     const socketConnect = () => {
-      let socketUrl = `ws://localhost:3001`;
+      let socketUrl = process.env.REACT_APP_SOCKET;
       if (Cookies.get("socketuserId")) {
-        socketUrl = `ws://localhost:3001?socketuserId=${Cookies.get(
+        socketUrl = `${process.env.REACT_APP_SOCKET}?socketuserId=${Cookies.get(
           "socketuserId"
         )}`;
       }
@@ -177,8 +196,8 @@ const Crash = ({
         socket.onmessage = function (event) {
           const socketData = decrypt(event.data);
           if (socketData.type === "crash") {
-            counterBox.innerText = convert(socketData.crash) + "x";
-            updateLine();
+            // console.log("coming", socketData.speed);
+            gameRunner(socketData.speed, socketData.crash);
 
             if (!initGame && timer === "0") {
               line.setAttribute("x2", 0);
@@ -191,7 +210,7 @@ const Crash = ({
               counterBox.classList.remove("hidden");
               svg.classList.remove("hidden");
               styleButton("bet", "disable");
-              console.log("hit init ", socketData.crash);
+              // console.log("hit init ", socketData.crash);
               bgsky.classList.add("bgskyAnimate");
               animateBottom();
               setAlert(false);
@@ -208,6 +227,7 @@ const Crash = ({
           }
 
           if (socketData.type === "crashed") {
+            gameRunner(200, 1.0, true);
             styleButton("cashout", "disabled");
 
             setCrashed(socketData.crashed);
@@ -219,7 +239,7 @@ const Crash = ({
             crashedBox.classList.remove("hidden");
             betRow.classList.add("bg-rose-900", "text-white", "border-red-500");
             setCrashNumber(convert(socketData.crash));
-            console.log("hit crashed");
+            // console.log("hit crashed");
             styleButton("bet", "disable");
             styleButton("cashout", "disable");
             // callBlastFunction();
@@ -315,13 +335,13 @@ const Crash = ({
               ) {
                 betRow.insertBefore(newBewRow, betRow.childNodes[i]);
                 inserted = true;
-                console.log("insert");
+                // console.log("insert");
                 break;
               }
             }
 
             if (!inserted) {
-              console.log("append");
+              // console.log("append");
               betRow.appendChild(newBewRow);
             }
 
@@ -329,7 +349,7 @@ const Crash = ({
 
             totalBets.innerText =
               parseInt(totalBets.innerText) +
-              parseFloat(socketData.betData.amount);
+              parseFloat(socketData.betData.amountInUSD);
           }
 
           if (socketData.type === "notifyBetPlaced") {
@@ -359,7 +379,7 @@ const Crash = ({
 
             totalWinnings.innerText = parseFloat(
               parseFloat(totalWinnings.innerText) +
-                parseFloat(socketData.amount)
+                parseFloat(socketData.amountInUSD)
             ).toFixed(2);
           }
 
@@ -391,12 +411,12 @@ const Crash = ({
     };
   }, []); // Run this effect only once on component mount
 
-  const resetCrashTemporary = () => {
-    // Emit a message to the server
-    const message = "Hello, world!";
-    // socket.emit("cashout", message);
-    console.log("Message sentd:", message);
-  };
+  // const resetCrashTemporary = () => {
+  //   // Emit a message to the server
+  //   const message = "Hello, world!";
+  //   // socket.emit("cashout", message);
+  //   console.log("Message sentd:", message);
+  // };
 
   const decrypt = (object) => {
     const encryptedData = object;
@@ -434,7 +454,9 @@ const Crash = ({
               Connecting...
             </div>
             <div className="absolute z-40 right-12 bottom-12">
-              <span id="counterBox" className="hidden text-4xl"></span>
+              <span id="counterBox" className="hidden text-4xl">
+                1.00
+              </span>
             </div>
             <div className="absolute z-20 left-[50%] bottom-[50%] translate-x-[-50%] translate-y-[-50%]">
               <span

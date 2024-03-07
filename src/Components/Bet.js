@@ -170,7 +170,9 @@ const Bet = ({
         setPlayers(data.data.data.players);
         setWinnings(data.data.data.winnings);
         if (data.data.data.userBetActve) {
-          styleButton("cashout", "active");
+          setTimeout(() => {
+            styleButton("cashout", "active");
+          }, data.data.data.timeout);
         }
       })
       .catch((error) => {
@@ -235,14 +237,16 @@ const Bet = ({
         </div>
         <div className="text-center">
           <div className=" text-xs">Total bets</div>
-          <div className="font-bold text-xs" id="totalBets">
-            {bets}
+          <div className="font-bold text-xs">
+            <span id="totalBets">{bets}</span>
+            <span> USD</span>
           </div>
         </div>
         <div className="text-center">
           <div className=" text-xs">Total winnings</div>
-          <div className="font-bold text-xs" id="totalWinnings">
-            {winnings}
+          <div className="font-bold text-xs">
+            <span id="totalWinnings">{winnings}</span>
+            <span> USD</span>
           </div>
         </div>
       </div>
@@ -271,16 +275,22 @@ const Bet = ({
                   <td>{livedata.publicUsername}</td>
                   <td>x{livedata.odds.$numberDecimal}</td>
                   <td>
-                    <div class="flex gap-1 items-center justify-center">
+                    <div className="flex gap-1 items-center justify-center">
                       {livedata.amount.$numberDecimal}{" "}
-                      <img class="w-3" src={currencyImage[livedata.currency]} />
+                      <img
+                        className="w-3"
+                        src={currencyImage[livedata.currency]}
+                      />
                     </div>
                   </td>
                   <td>
                     {" "}
-                    <div class="flex gap-1 items-center justify-center">
+                    <div className="flex gap-1 items-center justify-center">
                       {livedata.win.$numberDecimal}{" "}
-                      <img class="w-3" src={currencyImage[livedata.currency]} />
+                      <img
+                        className="w-3"
+                        src={currencyImage[livedata.currency]}
+                      />
                     </div>
                   </td>
                 </tr>
@@ -291,9 +301,20 @@ const Bet = ({
       </div>
       {alert && alert.success === true ? (
         <>
-          <div className="toast toast-top toast-center">
-            <div className="alert alert-success">
-              <span className="text-xl">{alert.message}</span>
+          <div className="toast toast-top top-[30px] toast-center">
+            <div className="alert py-2">
+              {alert.currency ? (
+                <div className="flex items-center gap-1 text-green-500">
+                  <span className="text-xl">Win </span>
+                  <span className="text-xl">{alert.amount}</span>
+                  <img
+                    className="w-5 h-5"
+                    src={currencyImage[alert.currency]}
+                  />
+                </div>
+              ) : (
+                <span className="text-xl">{alert.message}</span>
+              )}
             </div>
           </div>
         </>
@@ -302,8 +323,8 @@ const Bet = ({
       )}
       {alert && alert.success === false ? (
         <>
-          <div className="toast toast-top toast-center">
-            <div className="alert alert-error">
+          <div className="toast toast-top  top-[30px] toast-center">
+            <div className="alert alert-error py-2">
               <span>{alert.message}</span>
             </div>
           </div>

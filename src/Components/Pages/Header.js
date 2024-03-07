@@ -214,7 +214,7 @@ const Header = () => {
                         </svg>
                       </div>
                       <div
-                        className="absolute hidden  z-[100] right-0 p-3 top-10 bg-primary text-black rounded"
+                        className="absolute max-w-max hidden  z-[100] right-0 p-3 top-10 bg-primary text-black rounded"
                         id="btnm"
                       >
                         {Object.entries(balances).map(([currency, amount]) => (

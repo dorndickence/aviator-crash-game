@@ -194,6 +194,7 @@ const Crash = ({
         }, 1000);
 
         socket.onmessage = function (event) {
+          connectionMsg.innerText = "";
           const socketData = decrypt(event.data);
           if (socketData.type === "crash") {
             // console.log("coming", socketData.speed);

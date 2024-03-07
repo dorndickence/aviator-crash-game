@@ -155,9 +155,8 @@ const Crash = ({
         clearInterval(setGameInterval);
         // console.log(interval);
         setGameInterval = setInterval(() => {
-          counterBox.innerText = convert(
-            parseFloat(counterBox.innerText) + 0.01
-          );
+          const insert = convert(parseFloat(counterBox.innerText) + 0.01);
+          counterBox.innerText = insert + "x";
           updateLine();
         }, interval);
       }

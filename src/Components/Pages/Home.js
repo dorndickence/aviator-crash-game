@@ -2,6 +2,9 @@ import Crash from "../Crash";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import Bet from "../Bet";
+import crashSoundSrc from "../../sounds/crashSound.mp3";
+import crashedSoundSrc from "../../sounds/crashedSound.mp3";
+import clock from "../../sounds/clock.mp3";
 
 const Home = () => {
   const [crashNumber, setCrashNumber] = useState("");

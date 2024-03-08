@@ -3,10 +3,9 @@ import { useEffect, useState, useRef } from "react";
 import CryptoJS from "crypto-js";
 import fly from "../images/fly.png";
 import blastImg from "../images/blast.png";
-import clock from "../sounds/clock.mp3";
+
 import Cookies from "js-cookie";
-import crashSoundSrc from "../sounds/crashSound.mp3";
-import crashedSoundSrc from "../sounds/crashedSound.mp3";
+
 import AnimeLeft from "./AnimeLeft";
 import AnimeBottom from "./AnimeBottom";
 import bgsky from "../images/bgsky.jpg";

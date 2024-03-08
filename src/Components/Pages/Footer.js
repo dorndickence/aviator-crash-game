@@ -12,7 +12,7 @@ const Footer = () => {
         </nav>
 
         <aside>
-          <p>Copyright © 2024 - All right reserved by CrashFly.win</p>
+          <p>Copyright © 2024 - All right reserved by CrashFly.com</p>
         </aside>
       </footer>
     </>

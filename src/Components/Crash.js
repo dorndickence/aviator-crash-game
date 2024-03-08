@@ -27,6 +27,9 @@ const Crash = ({
   setWinnings,
   setPlayers,
   styleButton,
+  clockSound,
+  crashSound,
+  crashedSound,
 }) => {
   // const socket = io("ws://localhost:3001");
   let socket, socketInterval;
@@ -116,9 +119,7 @@ const Crash = ({
     const blast = document.getElementById("blast");
     const svg = document.getElementById("svg");
     const line = document.getElementById("line");
-    const clockSound = new Audio(clock);
-    const crashSound = new Audio(crashSoundSrc);
-    const crashedSound = new Audio(crashedSoundSrc);
+
     const crashedBox = document.getElementById("crashedBox");
     const placeBetBox = document.getElementById("placeBetBox");
     const connectionMsg = document.getElementById("connectionMsg");

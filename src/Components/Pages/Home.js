@@ -2,9 +2,6 @@ import Crash from "../Crash";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import Bet from "../Bet";
-import crashSoundSrc from "../../sounds/crashSound.mp3";
-import crashedSoundSrc from "../../sounds/crashedSound.mp3";
-import clock from "../../sounds/clock.mp3";
 
 const Home = () => {
   const [crashNumber, setCrashNumber] = useState("");
@@ -13,10 +10,6 @@ const Home = () => {
   const [players, setPlayers] = useState("0");
   const [bets, setBets] = useState("0");
   const [winnings, setWinnings] = useState("0");
-
-  const clockSound = new Audio(clock);
-  const crashSound = new Audio(crashSoundSrc);
-  const crashedSound = new Audio(crashedSoundSrc);
 
   const styleButton = (button, isTrue) => {
     const betButton = document.getElementById("beBTn");
@@ -49,12 +42,6 @@ const Home = () => {
     if (Cookies.get("sound")) {
       Cookies.remove("sound");
       e.target.removeAttribute("Checked");
-      crashSound.pause();
-      crashSound.currentTime = 0;
-      crashedSound.pause();
-      crashedSound.currentTime = 0;
-      clockSound.pause();
-      clockSound.currentTime = 0;
     } else {
       Cookies.set("sound", "yes");
     }
@@ -110,9 +97,6 @@ const Home = () => {
               bets={bets}
               players={players}
               styleButton={styleButton}
-              clockSound={clockSound}
-              crashSound={crashSound}
-              crashedSound={crashedSound}
             />
           </div>
           <div className="px-3 sm:px-0">

@@ -5,7 +5,9 @@ import fly from "../images/fly.png";
 import blastImg from "../images/blast.png";
 
 import Cookies from "js-cookie";
-
+import crashSoundSrc from "../sounds/crashSound.mp3";
+import crashedSoundSrc from "../sounds/crashedSound.mp3";
+import clock from "../sounds/clock.mp3";
 import AnimeLeft from "./AnimeLeft";
 import AnimeBottom from "./AnimeBottom";
 import bgsky from "../images/bgsky.jpg";
@@ -26,9 +28,6 @@ const Crash = ({
   setWinnings,
   setPlayers,
   styleButton,
-  clockSound,
-  crashSound,
-  crashedSound,
 }) => {
   // const socket = io("ws://localhost:3001");
   let socket, socketInterval;
@@ -128,6 +127,11 @@ const Crash = ({
     const totalPlayers = document.getElementById("totalPlayers");
     const totalBets = document.getElementById("totalBets");
     //in bet.js end
+
+    const clockSound = new Audio(clock);
+    const crashSound = new Audio(crashSoundSrc);
+    const crashedSound = new Audio(crashedSoundSrc);
+
     function updateLine() {
       const rect = animateBox.getBoundingClientRect();
       const svgRect = svg.getBoundingClientRect();
@@ -171,6 +175,7 @@ const Crash = ({
       }
 
       socket = new WebSocket(socketUrl);
+
       socket.onclose = () => {
         connectionMsg.innerText = "Connection lost";
         // socketInterval = setInterval(socketConnect, 5000);
@@ -254,6 +259,19 @@ const Crash = ({
                 setTimeout(() => {
                   clockSound.play();
                 }, 2000);
+              } else {
+                if (crashSound.currentTime > 0) {
+                  crashSound.pause();
+                  crashSound.currentTime = 0;
+                }
+                if (clockSound.currentTime > 0) {
+                  clockSound.pause();
+                  clockSound.currentTime = 0;
+                }
+                if (crashedSound.currentTime > 0) {
+                  crashedSound.pause();
+                  crashedSound.currentTime = 0;
+                }
               }
             }
           }
@@ -292,6 +310,19 @@ const Crash = ({
                   setTimeout(() => {
                     crashSound.play();
                   }, 1000);
+                } else {
+                  if (crashSound.currentTime > 0) {
+                    crashSound.pause();
+                    crashSound.currentTime = 0;
+                  }
+                  if (clockSound.currentTime > 0) {
+                    clockSound.pause();
+                    clockSound.currentTime = 0;
+                  }
+                  if (crashedSound.currentTime > 0) {
+                    crashedSound.pause();
+                    crashedSound.currentTime = 0;
+                  }
                 }
               }
             }

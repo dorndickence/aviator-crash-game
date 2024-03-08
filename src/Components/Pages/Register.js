@@ -80,6 +80,9 @@ const Register = () => {
             msg.innerText = `Account created successfully. Login & Enjoy :)`;
             msg.classList.add("text-green-300");
             msgfire.appendChild(msg);
+            setTimeout(() => {
+              window.location.replace("./login");
+            }, 5000);
           } else {
             const msg = document.createElement("div");
             msg.innerText = `Something went wrong #${data.status}`;

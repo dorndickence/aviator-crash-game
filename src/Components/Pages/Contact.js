@@ -7,9 +7,9 @@ const Contact = () => {
             <h1 className="text-5xl font-bold">Get In Touch</h1>
 
             <p className="py-6">
-              Send us email for any purpose
+              Send us message
               <br />
-              support@cryptocrash.win
+              Telegram: @crashflysupport
             </p>
           </div>
         </div>

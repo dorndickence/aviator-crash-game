@@ -60,7 +60,7 @@ const Bet = ({
     }
 
     if (currency === undefined) {
-      setAlert({ message: "Currency is not updated", success: false });
+      setAlert({ message: "Please topup", success: false });
       return;
     }
 

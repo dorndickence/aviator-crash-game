@@ -8,12 +8,13 @@ import dai from "../../images/dai.svg";
 import sol from "../../images/sol.svg";
 const Header = () => {
   const [balances, setBalances] = useState([]);
-  const getBalanceMethod = (currency, amount) => {
+  const getBalanceMethod = (currency) => {
     const btnModal = document.getElementById("btnm");
+    const amount = document.querySelector(`.${currency}`).innerText;
     btnModal.classList.toggle("hidden");
     Cookies.set("currency", currency);
     const balanceChange = document.getElementById("balanceChange");
-    const amountx = parseFloat(amount.$numberDecimal).toFixed(8);
+    const amountx = parseFloat(amount).toFixed(8);
     balanceChange.innerHTML = ` <div
     class="bg-primary  cursor-pointer flex gap-1 items-center justify-between "
   >
@@ -220,7 +221,7 @@ const Header = () => {
                         {Object.entries(balances).map(([currency, amount]) => (
                           <div
                             className="cursor-pointer hover:bg-blue-700 p-3"
-                            onClick={() => getBalanceMethod(currency, amount)}
+                            onClick={() => getBalanceMethod(currency)}
                             key={currency}
                           >
                             <div className="flex items-center gap-1  overflow-hidden">

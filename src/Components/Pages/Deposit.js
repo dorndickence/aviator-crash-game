@@ -110,27 +110,6 @@ const Deposit = () => {
       });
   };
 
-  const checkPayment = (e) => {
-    e.target.innerText = "Please wait";
-    axios
-      .post(`${process.env.REACT_APP_API_URL}checkDeposit`, {
-        token: Cookies.get("token"),
-        depositId: depositId,
-      })
-      .then((data) => {
-        e.target.innerText = "Check For payment";
-        document.getElementById("deposistForm").classList.add("hidden");
-        document.getElementById("success").classList.remove("hidden");
-      })
-      .catch((error) => {
-        e.target.innerText = "Check For payment";
-        document.getElementById("errormhg").classList.remove("hidden");
-        setTimeout(() => {
-          document.getElementById("errormhg").classList.add("hidden");
-        }, 5000);
-      });
-  };
-
   return (
     <>
       <div className="min-h-[70vh] my-12">
@@ -258,22 +237,6 @@ const Deposit = () => {
                   has been processed, you can revisit this page to make another
                   deposit. Thank you for your cooperation.
                 </p>
-              </div>
-
-              <div>
-                <div id="errormhg" className="text-center hidden">
-                  <span className="badge badge-error">
-                    We still did not received your deposit
-                  </span>
-                </div>
-                <div>
-                  <button
-                    onClick={checkPayment}
-                    className="btn btn-primary w-full"
-                  >
-                    Check for payment
-                  </button>
-                </div>
               </div>
             </div>
             <div id="succcess" className="hidden">

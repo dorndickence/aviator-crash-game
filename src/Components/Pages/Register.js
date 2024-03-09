@@ -50,14 +50,14 @@ const Register = () => {
     const inputs = document.querySelectorAll("input");
     const msgfire = document.getElementById("msgfire");
     msgfire.innerHTML = "";
-    const promoObject = {
-      code: inputs[4].value,
-      type: "promo",
-    };
+    const promoObject = {};
 
     if (Cookies.get("partner")) {
       promoObject.code = Cookies.get("partner");
       promoObject.type = "partnerId";
+    } else {
+      promoObject.code = inputs[4].value;
+      promoObject.type = "promo";
     }
 
     const userData = {

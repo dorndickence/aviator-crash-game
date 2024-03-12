@@ -267,16 +267,25 @@ const Bet = ({
                 <tr
                   key={index}
                   className={
-                    livedata.win.$numberDecimal > 0
+                    livedata.win.$numberDecimal
+                      ? livedata.win.$numberDecimal
+                      : livedata.win > 0
                       ? `bet${livedata._id} bg-green-900 border-green-500 text-white`
                       : `bet${livedata._id}`
                   }
                 >
                   <td>{livedata.publicUsername}</td>
-                  <td>x{livedata.odds.$numberDecimal}</td>
+                  <td>
+                    x
+                    {livedata.odds.$numberDecimal
+                      ? livedata.odds.$numberDecimal
+                      : livedata.odds}
+                  </td>
                   <td>
                     <div className="flex gap-1 items-center justify-center">
-                      {livedata.amount.$numberDecimal}{" "}
+                      {livedata.amount.$numberDecimal
+                        ? livedata.amount.$numberDecimal
+                        : livedata.amount}{" "}
                       <img
                         className="w-3"
                         src={currencyImage[livedata.currency]}
@@ -286,7 +295,9 @@ const Bet = ({
                   <td>
                     {" "}
                     <div className="flex gap-1 items-center justify-center">
-                      {livedata.win.$numberDecimal}{" "}
+                      {livedata.win.$numberDecimal
+                        ? livedata.win.$numberDecimal
+                        : livedata.win}
                       <img
                         className="w-3"
                         src={currencyImage[livedata.currency]}

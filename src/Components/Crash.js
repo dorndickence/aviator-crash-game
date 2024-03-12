@@ -395,23 +395,24 @@ const Crash = ({
 
           if (socketData.type === "winData") {
             const winElement = document.querySelector(`.bet${socketData._id}`);
+            if (winElement) {
+              winElement.classList.add(
+                "text-white",
+                "bg-green-900",
+                "border-green-500"
+              );
+              winElement.childNodes[3].innerHTML = `<div class="flex gap-1 items-center justify-center">${
+                socketData.amount
+              } <img class="w-3"  src=${
+                currencyImage[socketData.currency]
+              }></div>`;
+              winElement.childNodes[1].innerText = `${socketData.odds}x`;
 
-            winElement.classList.add(
-              "text-white",
-              "bg-green-900",
-              "border-green-500"
-            );
-            winElement.childNodes[3].innerHTML = `<div class="flex gap-1 items-center justify-center">${
-              socketData.amount
-            } <img class="w-3"  src=${
-              currencyImage[socketData.currency]
-            }></div>`;
-            winElement.childNodes[1].innerText = `${socketData.odds}x`;
-
-            totalWinnings.innerText = parseFloat(
-              parseFloat(totalWinnings.innerText) +
-                parseFloat(socketData.amountInUSD)
-            ).toFixed(2);
+              totalWinnings.innerText = parseFloat(
+                parseFloat(totalWinnings.innerText) +
+                  parseFloat(socketData.amountInUSD)
+              ).toFixed(2);
+            }
           }
 
           if (socketData.type === "notifyBetWon") {

@@ -151,7 +151,7 @@ const Crash = ({
     let initGame = false;
     // Subscribe to the 'crash' event
 
-    let setGameInterval;
+    let setGameInterval, setClockInterval;
 
     const gameRunner = (interval = 120, starting = 1.0, clear = false) => {
       if (clear) {
@@ -164,6 +164,19 @@ const Crash = ({
           const insert = convert(parseFloat(counterBox.innerText) + 0.01);
           counterBox.innerText = insert + "x";
           updateLine();
+        }, interval);
+      }
+    };
+
+    const clockRunner = (interval = 600, starting = 0, clear = false) => {
+      if (clear) {
+        clearInterval(setClockInterval);
+      } else {
+        setTimer(starting);
+        clearInterval(setClockInterval);
+        // console.log(interval);
+        setClockInterval = setInterval(() => {
+          setTimer(timer - 1);
         }, interval);
       }
     };
@@ -279,7 +292,7 @@ const Crash = ({
           }
 
           if (socketData.type === "timer") {
-            setTimer(socketData.timer);
+            clockRunner(600, socketData.timer, false);
             if (socketData.timer === 2) {
               betRow.classList.remove(
                 "bg-rose-900",
@@ -304,6 +317,7 @@ const Crash = ({
             }
 
             if (socketData.timer === 10) {
+              clockRunner(600, socketData.timer, true);
               placeBetBox.classList.add("hidden");
 
               styleButton("bet", "disable");

@@ -15,6 +15,7 @@ import usdttrc20 from "../images/usdttrc20.svg";
 import trx from "../images/trx.svg";
 import dai from "../images/dai.svg";
 import sol from "../images/sol.svg";
+import bdt from "../images/bdt2.png";
 
 const Crash = ({
   crashNumber,
@@ -40,6 +41,7 @@ const Crash = ({
     sol: sol,
     dai: dai,
     trx: trx,
+    bdt: bdt,
   };
 
   const sortTable = (columnIndex) => {

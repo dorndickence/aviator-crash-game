@@ -168,18 +168,18 @@ const Crash = ({
       }
     };
 
-    const clockRunner = (interval = 600, starting = 0, clear = false) => {
-      if (clear) {
-        clearInterval(setClockInterval);
-      } else {
-        setTimer(starting);
-        clearInterval(setClockInterval);
-        // console.log(interval);
-        setClockInterval = setInterval(() => {
-          setTimer(timer - 1);
-        }, interval);
-      }
-    };
+    // const clockRunner = (interval = 600, starting = 0, clear = false) => {
+    //   if (clear) {
+    //     clearInterval(setClockInterval);
+    //   } else {
+    //     setTimer(starting);
+    //     clearInterval(setClockInterval);
+    //     // console.log(interval);
+    //     setClockInterval = setInterval(() => {
+    //       setTimer(timer - 1);
+    //     }, interval);
+    //   }
+    // };
 
     const socketConnect = () => {
       let socketUrl = process.env.REACT_APP_SOCKET;
@@ -293,7 +293,8 @@ const Crash = ({
           }
 
           if (socketData.type === "timer") {
-            clockRunner(600, socketData.timer, false);
+            // clockRunner(600, socketData.timer, false);
+            setTimer(socketData.timer);
             if (socketData.timer === 2) {
               betRow.classList.remove(
                 "bg-rose-900",
@@ -318,7 +319,7 @@ const Crash = ({
             }
 
             if (socketData.timer === 10) {
-              clockRunner(600, socketData.timer, true);
+              // clockRunner(600, socketData.timer, true);
               placeBetBox.classList.add("hidden");
 
               styleButton("bet", "disable");
@@ -549,9 +550,7 @@ const Crash = ({
 
             <div className="absolute z-50 right-12 bottom-12 text-2xl">
               {crashed && timer < 11 ? (
-                <div className="countdown font-mono text-6xl">
-                  <span style={{ "--value": timer }}></span>
-                </div>
+                <div className="font-mono text-6xl">{timer}</div>
               ) : (
                 <></>
               )}

@@ -6,6 +6,7 @@ import usdttrc20 from "../../images/usdttrc20.svg";
 import trx from "../../images/trx.svg";
 import dai from "../../images/dai.svg";
 import sol from "../../images/sol.svg";
+import bdt from "../../images/bdt2.png";
 const Header = () => {
   const [balances, setBalances] = useState([]);
   const getBalanceMethod = (currency) => {
@@ -14,9 +15,9 @@ const Header = () => {
     btnModal.classList.toggle("hidden");
     Cookies.set("currency", currency);
     const balanceChange = document.getElementById("balanceChange");
-    const amountx = parseFloat(amount).toFixed(8);
+    const amountx = formatAmount(currency, amount);
     balanceChange.innerHTML = ` <div
-    class="bg-primary  cursor-pointer flex gap-1 items-center justify-between "
+    class=" rounded text-black  cursor-pointer flex gap-1 items-center justify-between "
   >
   <img class="w-4 h-4" src=${currencyImage[Cookies.get("currency")]}>
     <span class="${currency}">
@@ -29,6 +30,7 @@ const Header = () => {
     sol: sol,
     dai: dai,
     trx: trx,
+    bdt: bdt,
   };
   const getBalance = () => {
     axios
@@ -47,16 +49,17 @@ const Header = () => {
             // console.log(balanceChange);
 
             balanceChange.innerHTML = ` <div
-            class="bg-primary  cursor-pointer flex gap-1 items-center justify-between "
+            class=" text-black  cursor-pointer flex gap-1 items-center justify-between "
           >
           <img class="w-4 h-4" src=${
             currencyImage[Object.keys(data.data.data)[0]]
           }>
          
             <span class="${Object.keys(data.data.data)[0]}">
-              ${parseFloat(
-                Object.values(data.data.data)[0].$numberDecimal
-              ).toFixed(8)}
+            ${formatAmount(
+              Object.keys(data.data.data)[0],
+              Object.values(data.data.data)[0].$numberDecimal
+            )}
             </span>
           </div>`;
           }, 1000);
@@ -71,15 +74,16 @@ const Header = () => {
             const balanceChange = document.getElementById("balanceChange");
 
             balanceChange.innerHTML = ` <div
-            class="bg-primary  cursor-pointer items-center flex gap-1 justify-between "
+            class=" rounded text-black cursor-pointer items-center flex gap-1 justify-between "
           >
           <img class="w-4 h-4" src=${currencyImage[Cookies.get("currency")]}>
          
             <span class="${Cookies.get("currency")}">
-          
-              ${parseFloat(
-                data.data.data[Cookies.get("currency")].$numberDecimal
-              ).toFixed(8)}
+
+            ${formatAmount(
+              Cookies.get("currency"),
+              data.data.data[Cookies.get("currency")].$numberDecimal
+            )}
             </span>
           </div>`;
           }, 100);
@@ -93,6 +97,12 @@ const Header = () => {
   const balanceBtm = () => {
     const btnModal = document.getElementById("btnm");
     btnModal.classList.toggle("hidden");
+  };
+  const formatAmount = (currency, amount) => {
+    if (currency === "sol") {
+      return parseFloat(amount).toFixed(8);
+    }
+    return parseFloat(amount).toFixed(2);
   };
   useEffect(() => {
     if (Cookies.get("token")) {
@@ -128,7 +138,7 @@ const Header = () => {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                  className="menu menu-sm dropdown-content mt-3 z-[200] p-2 shadow bg-base-100 rounded-box w-52"
                 >
                   <li>
                     <a href="./deposit">Deposit</a>
@@ -191,12 +201,12 @@ const Header = () => {
                 </div> */}
                 <div className="relative">
                   {balances.length === 0 ? (
-                    <div className="badge badge-primary">Balance: 00</div>
+                    <div className="badge bg-white">Balance: 00</div>
                   ) : (
                     <>
                       <div
                         onClick={balanceBtm}
-                        className="badge cursor-pointer badge-primary flex items-center"
+                        className="badge cursor-pointer bg-white flex items-center"
                       >
                         <div id="balanceChange"> Balance: 00</div>
                         <svg
@@ -215,22 +225,22 @@ const Header = () => {
                         </svg>
                       </div>
                       <div
-                        className="absolute max-w-max hidden  z-[100] right-0 p-3 top-10 bg-primary text-black rounded"
+                        className="absolute max-w-max hidden space-y-3 z-[100] right-0 top-10 text-black rounded"
                         id="btnm"
                       >
                         {Object.entries(balances).map(([currency, amount]) => (
                           <div
-                            className="cursor-pointer hover:bg-blue-700 p-3"
+                            className="cursor-pointer bg-white rounded hover:bg-blue-700"
                             onClick={() => getBalanceMethod(currency)}
                             key={currency}
                           >
-                            <div className="flex items-center gap-1  overflow-hidden">
+                            <div className="flex items-center gap-1 p-2">
                               <img
                                 className="w-6"
                                 src={currencyImage[currency]}
                               />
-                              <span className={currency}>
-                                {parseFloat(amount.$numberDecimal).toFixed(8)}
+                              <span className={`${currency} text-xs`}>
+                                {formatAmount(currency, amount.$numberDecimal)}
                               </span>
                             </div>
                           </div>

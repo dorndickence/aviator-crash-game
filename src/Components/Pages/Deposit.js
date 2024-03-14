@@ -3,6 +3,7 @@ import usdttrc20 from "../../images/usdttrc20.svg";
 import trx from "../../images/trx.svg";
 import dai from "../../images/dai.svg";
 import sol from "../../images/sol.svg";
+import bdt from "../../images/bdt.png";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import DepositHistory from "./DepositHistory";
@@ -150,6 +151,30 @@ const Deposit = () => {
               </div>
             );
           })}
+          {/* BDT */}
+          <div className="min-w-[200px]">
+            <div
+              className="flex mx-auto p-3 gap-3 border border-blue-200 rounded-lg cursor-pointer hover:bg-zinc-700"
+              onClick={() =>
+                (window.location.href = "https://t.me/crashflybdt")
+              }
+            >
+              <div>
+                <img src={bdt} className="w-44" />
+              </div>
+              <div>
+                <div className="text-white flex gap-1 items-center">
+                  <h2 className="text-base"> BDT </h2>
+                  <p className={`text-xs px-2 rounded-sm bg-sky-600`}>
+                    Telegram
+                  </p>
+                </div>
+                <p>@crashflybdt</p>
+              </div>
+            </div>
+          </div>
+
+          {/* BDT END */}
         </div>
         {/* Open the modal using document.getElementById('ID').showModal() method */}
 

@@ -5,6 +5,7 @@ import usdttrc20 from "../images/usdttrc20.svg";
 import trx from "../images/trx.svg";
 import dai from "../images/dai.svg";
 import sol from "../images/sol.svg";
+import bdt from "../images/bdt2.png";
 
 const Bet = ({
   alert,
@@ -26,6 +27,13 @@ const Bet = ({
     sol: sol,
     dai: dai,
     trx: trx,
+    bdt: bdt,
+  };
+  const formatAmount = (currency, amount) => {
+    if (currency === "sol") {
+      return parseFloat(amount).toFixed(8);
+    }
+    return parseFloat(amount).toFixed(2);
   };
 
   const loginValidation = () => {
@@ -99,9 +107,10 @@ const Bet = ({
             styleButton("bet", "disable");
 
             cm.forEach((c) => {
-              c.innerText = (
+              c.innerText = formatAmount(
+                currency,
                 parseFloat(c.innerText) - parseFloat(amount)
-              ).toFixed(8);
+              );
             });
           }
         })
@@ -143,9 +152,10 @@ const Bet = ({
           setAlert(data.data);
           setCashoutBtn(false);
           cm.forEach((c) => {
-            c.innerText = (
+            c.innerText = formatAmount(
+              currency,
               parseFloat(c.innerText) + parseFloat(data.data.amount)
-            ).toFixed(8);
+            );
           });
         }
       })

@@ -123,6 +123,7 @@ const Crash = ({
     const crashedBox = document.getElementById("crashedBox");
     const placeBetBox = document.getElementById("placeBetBox");
     const connectionMsg = document.getElementById("connectionMsg");
+    const clockTimer = document.getElementById("clockTimer");
     //in bet.js
     const betRow = document.getElementById("betRow");
     const totalWinnings = document.getElementById("totalWinnings");
@@ -168,18 +169,23 @@ const Crash = ({
       }
     };
 
-    // const clockRunner = (interval = 600, starting = 0, clear = false) => {
-    //   if (clear) {
-    //     clearInterval(setClockInterval);
-    //   } else {
-    //     setTimer(starting);
-    //     clearInterval(setClockInterval);
-    //     // console.log(interval);
-    //     setClockInterval = setInterval(() => {
-    //       setTimer(timer - 1);
-    //     }, interval);
-    //   }
-    // };
+    const clockRunner = (interval = 50, starting = 0, clear = false) => {
+      if (clear) {
+        clearInterval(setClockInterval);
+        clockTimer.innerText = "0.00";
+      } else {
+        // console.log(interval);
+        if (starting < 11) {
+          clearInterval(setClockInterval);
+          clockTimer.innerText = parseFloat(starting).toFixed(2);
+          setClockInterval = setInterval(() => {
+            clockTimer.innerText = (
+              parseFloat(clockTimer.innerText) + 0.01
+            ).toFixed(2);
+          }, interval);
+        }
+      }
+    };
 
     const socketConnect = () => {
       let socketUrl = process.env.REACT_APP_SOCKET;
@@ -221,17 +227,20 @@ const Crash = ({
             gameRunner(socketData.speed, socketData.crash);
 
             if (!initGame && timer === "0") {
+              clockTimer.classList.add("hidden");
               line.setAttribute("x2", 0);
               line.setAttribute("y2", 0);
               clockSound.pause();
               clockSound.currentTime = 0;
               animateBox.classList.add("animate-plane");
+              placeBetBox.classList.add("hidden");
               animateBox.style.animationPlayState = "running";
               animatePlane.classList.remove("hidden");
               counterBox.classList.remove("hidden");
               svg.classList.remove("hidden");
               styleButton("bet", "disable");
               // console.log("hit init ", socketData.crash);
+
               bgsky.classList.add("bgskyAnimate");
               animateBottom();
               setAlert(false);
@@ -290,11 +299,13 @@ const Crash = ({
                 }
               }
             }
+            clockTimer.classList.remove("hidden");
           }
 
           if (socketData.type === "timer") {
-            // clockRunner(600, socketData.timer, false);
             setTimer(socketData.timer);
+            clockRunner(7, socketData.timer, false);
+            // setTimer(socketData.timer);
             if (socketData.timer === 2) {
               betRow.classList.remove(
                 "bg-rose-900",
@@ -319,7 +330,7 @@ const Crash = ({
             }
 
             if (socketData.timer === 10) {
-              // clockRunner(600, socketData.timer, true);
+              clockRunner(600, socketData.timer, true);
               placeBetBox.classList.add("hidden");
 
               styleButton("bet", "disable");
@@ -517,7 +528,7 @@ const Crash = ({
               </span>
               <span
                 id="placeBetBox"
-                className="text-1xl  text-white md:text-2xl lg:text-4xl hidden"
+                className="text-1xl  text-white md:text-2xl lg:text-4xl"
               >
                 Place Your Bet
               </span>
@@ -548,12 +559,11 @@ const Crash = ({
               ></line>
             </svg>
 
-            <div className="absolute z-50 right-12 bottom-12 text-2xl">
-              {crashed && timer < 11 ? (
-                <div className="font-mono text-6xl">{timer}</div>
-              ) : (
-                <></>
-              )}
+            <div
+              id="clockTimer"
+              className="absolute z-50 right-12 bottom-12 text-3xl"
+            >
+              0.00
             </div>
           </div>
         </div>

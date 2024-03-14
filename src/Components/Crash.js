@@ -193,6 +193,7 @@ const Crash = ({
 
       socket.onclose = () => {
         connectionMsg.innerText = "Connection lost";
+        connectionMsg.classList.remove("hidden");
         // socketInterval = setInterval(socketConnect, 5000);
 
         crashSound.pause();
@@ -209,11 +210,11 @@ const Crash = ({
         // clearInterval(socketInterval);
 
         setTimeout(() => {
-          connectionMsg.innerText = "";
+          connectionMsg.classList.add("hidden");
         }, 1000);
 
         socket.onmessage = function (event) {
-          connectionMsg.innerText = "";
+          connectionMsg.classList.add("hidden");
           const socketData = decrypt(event.data);
           if (socketData.type === "crash") {
             // console.log("coming", socketData.speed);
@@ -392,7 +393,7 @@ const Crash = ({
               betRow.appendChild(newBewRow);
             }
 
-            totalPlayers.innerText = parseInt(totalPlayers.innerText) + 1;
+            totalPlayers.innerText = parseInt(totalPlayers.innerText) + 3;
 
             totalBets.innerText =
               parseInt(totalBets.innerText) +
@@ -483,6 +484,12 @@ const Crash = ({
   return (
     <>
       <div className="container ">
+        <div
+          id="connectionMsg"
+          className="absolute text-3xl flex pt-48 justify-center z-[60] bg-black w-full h-full"
+        >
+          Connecting...
+        </div>
         <div className="absolute w-[fit-content] h-[200px]">
           <AnimeLeft />
           <AnimeBottom />
@@ -495,12 +502,6 @@ const Crash = ({
               </div>
             </div>
 
-            <div
-              id="connectionMsg"
-              className="absolute top-0 left-[50%] translate-x-[-50%]"
-            >
-              Connecting...
-            </div>
             <div className="absolute z-40 right-12 bottom-12">
               <span id="counterBox" className="hidden text-4xl">
                 1.00x

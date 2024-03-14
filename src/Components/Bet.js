@@ -242,7 +242,7 @@ const Bet = ({
         <div className="text-center">
           <div className=" text-xs">Number of players</div>
           <div className="font-bold text-xs" id="totalPlayers">
-            {players}
+            {players * 3}
           </div>
         </div>
         <div className="text-center">

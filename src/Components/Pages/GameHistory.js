@@ -5,6 +5,7 @@ import usdttrc20 from "../../images/usdttrc20.svg";
 import trx from "../../images/trx.svg";
 import dai from "../../images/dai.svg";
 import sol from "../../images/sol.svg";
+import bdt from "../../images/bdt2.png";
 const GameHistory = () => {
   const [history, setHistory] = useState(false);
   const [totalPages, setTotalPages] = useState([0]);
@@ -14,6 +15,7 @@ const GameHistory = () => {
     sol: sol,
     dai: dai,
     trx: trx,
+    bdt: bdt,
   };
 
   const historyMethod = (page = 0) => {

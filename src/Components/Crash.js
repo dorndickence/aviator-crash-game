@@ -465,6 +465,11 @@ const Crash = ({
         socketConnect();
       }
     });
+
+    return () => {
+      // Close WebSocket connection
+      socket.close();
+    };
   }, []); // Run this effect only once on component mount
 
   // const resetCrashTemporary = () => {

@@ -287,7 +287,8 @@ const Crash = ({
             animateBottomStop();
             initGame = false;
 
-            if (userInteraction) {
+            /*
+              if (userInteraction) {
               if (Cookies.get("sound")) {
                 crashSound.pause();
                 crashSound.currentTime = 0;
@@ -314,6 +315,31 @@ const Crash = ({
             }
             clockTimer.classList.remove("hidden");
           }
+*/
+
+      if (userInteraction) {
+    if (Cookies.get("sound")) {
+      // Stop and reset sounds before playing new ones
+      if (crashSound.currentTime > 0) {
+        crashSound.pause();
+        crashSound.currentTime = 0;
+      }
+      if (crashedSound.currentTime > 0) {
+        crashedSound.pause();
+        crashedSound.currentTime = 0;
+      }
+      crashedSound.play().catch(err => {
+        console.error("Playback failed:", err);
+      });
+      setTimeout(() => {
+        clockSound.play().catch(err => {
+          console.error("Playback failed:", err);
+        });
+      }, 2000);
+    }
+  }
+}
+
 
           if (socketData.type === "timer") {
             setTimer(socketData.timer);
@@ -347,7 +373,7 @@ const Crash = ({
               placeBetBox.classList.add("hidden");
 
               styleButton("bet", "disable");
-              if (userInteraction) {
+              /*if (userInteraction) {
                 if (Cookies.get("sound")) {
                   setTimeout(() => {
                     crashSound.play();
@@ -369,7 +395,25 @@ const Crash = ({
               }
             }
           }
-
+*/        
+          if (userInteraction) {
+    if (Cookies.get("sound")) {
+      // Stop and reset the crash sound before playing it again
+      if (crashSound.currentTime > 0) {
+        crashSound.pause();
+        crashSound.currentTime = 0;
+      }
+      // Manage the clock sound
+      if (clockSound.currentTime > 0) {
+        clockSound.pause();
+        clockSound.currentTime = 0;
+      }
+      clockSound.play().catch(err => {
+        console.error("Playback failed:", err);
+      });
+    }
+  }
+}
           if (socketData.type === "betData") {
             const newBewRow = document.createElement("tr");
 

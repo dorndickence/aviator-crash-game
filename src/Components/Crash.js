@@ -94,7 +94,8 @@ const Crash = ({
   };
   //animation end
 
-  let userInteraction = false;
+  //let userInteraction = false;
+  const [userInteraction, setUserInteraction] = useState(false);
   // const blastRef = useRef(null);
 
   // const callBlastFunction = (type) => {
@@ -103,7 +104,7 @@ const Crash = ({
   //   }
   // };
 
-  useEffect(() => {
+  /*useEffect(() => {
     document.body.addEventListener(
       "click",
       () => {
@@ -111,6 +112,16 @@ const Crash = ({
       },
       { once: true }
     );
+*/
+  useEffect(() => {
+    const handleUserInteraction = () => {
+      setUserInteraction(true);
+      document.body.removeEventListener("click", handleUserInteraction);
+    };
+
+    document.body.addEventListener("click", handleUserInteraction, { once: true });
+
+
 
     const animateBox = document.getElementById("animateBox");
     const animatePlane = document.getElementById("animatePlane");
@@ -280,7 +291,9 @@ const Crash = ({
               if (Cookies.get("sound")) {
                 crashSound.pause();
                 crashSound.currentTime = 0;
-                crashedSound.play();
+                crashedSound.play().catch(err => {
+              console.error("Playback failed:", err);
+            });
                 setTimeout(() => {
                   clockSound.play();
                 }, 2000);

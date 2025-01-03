@@ -7,6 +7,7 @@ import bdt from "../../images/bdt.png";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import WithdrawHistory from "./WithdrawHistory";
+import Mpesatransaction from './Mpesatransaction';
 const Withdraw = () => {
   // axios(config)
   //   .then(function (response) {
@@ -61,6 +62,10 @@ const Withdraw = () => {
     setCoinIndex(coinIndex);
   };
 
+const handleWithdraw = (index) => {
+    setCoinIndex(index);
+    setShowMpesatransaction(true); // Show the M-PESA transaction component
+  };
   const withdraw = () => {
     const amount = document.getElementById("amount");
     const account = document.getElementById("account");
@@ -94,6 +99,35 @@ const Withdraw = () => {
 
   return (
     <>
+    
+     <div className="min-h-[70vh] my-12">
+        <div className="flex flex-col mx-5 md:flex-row justify-around gap-12 flex-wrap">
+          {coins.map((coin, index) => (
+            <div key={index} className="min-w-[200px]">
+              <div
+                className="flex mx-auto p-3 gap-3 border border-blue-200 rounded-lg cursor-pointer hover:bg-zinc-700"
+                onClick={() => handleWithdraw(index)}
+              >
+                <div>
+                  <img src={coin.image} className="w-12" alt={coin.name} />
+                </div>
+                <div>
+                  <h2 className="text-base">{coin.name}</h2>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {showMpesatransaction && (
+          <Mpesatransaction 
+            onClose={() => setShowMpesatransaction(false)} 
+            transactionType="withdraw" 
+            coin={coins[coinIndex]} // Pass relevant coin data
+          />
+        )}
+      </div>
+      
       <div className="min-h-[70vh] my-12">
         <div className="flex flex-col mx-5 md:flex-row justify-around gap-12 flex-wrap">
           {coins.map((coin, index) => {

@@ -4,6 +4,7 @@ import trx from "../../images/trx.svg";
 import dai from "../../images/dai.svg";
 import sol from "../../images/sol.svg";
 import bdt from "../../images/bdt.png";
+import mpesa from "../../images/mpesa.svg
 import { useState } from "react";
 import Cookies from "js-cookie";
 import WithdrawHistory from "./WithdrawHistory";

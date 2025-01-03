@@ -1,0 +1,103 @@
+/* app.css */
+
+/* General styles */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #00c853, #b2ff59); /* Vibrant M-PESA theme */
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Container styling */
+div {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px 25px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+/* Heading styling */
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Input fields styling */
+input,
+select {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  color: #333;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+input:focus,
+select:focus {
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.8);
+}
+
+/* Button styling */
+button {
+  width: 100%;
+  padding: 12px 15px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #00e676, #1b5e20);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #1b5e20, #00e676);
+  transform: scale(1.05);
+}
+p {
+  margin: 10px 0;
+}
+
+.loading {
+  font-size: 16px;
+  color: #00e676; /* Green for loading */
+}
+
+.error {
+  color: red; /* Red for errors */
+}
+/* Responsive design */
+@media (max-width: 480px) {
+  div {
+    padding: 15px 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  input,
+  select,
+  button {
+    font-size: 14px;
+  }
+}

@@ -37,8 +37,19 @@ const Deposit = () => {
       }, 5000);
     }
   };
+  
 
   const coins = [
+    {
+      name: "M-PESA", // Add M-PESA entry
+      symbol: "mpesa",
+      image: mpesa, // Ensure you have an appropriate image
+      fullName: "Lipa na M-PESA",
+      network: "M-PESA",
+      colorName: "green",
+      payNetwork: "M-PESA",
+    },
+    
     {
       name: "USDT",
       symbol: "usdttrc20",
@@ -122,7 +133,7 @@ const Deposit = () => {
 
     return (
     <>
-          <div className="min-h-[70vh] my-12">
+            <div className="min-h-[70vh] my-12">
         <div className="flex flex-col mx-5 md:flex-row justify-around gap-12 flex-wrap">
           {coins.map((coin, index) => (
             <div key={index} className="min-w-[200px]">
@@ -141,7 +152,7 @@ const Deposit = () => {
           ))}
         </div>
 
-            {showMpesatransaction && (
+        {showMpesatransaction && (
           <Mpesatransaction 
             onClose={() => setShowMpesatransaction(false)} 
             transactionType="deposit" 

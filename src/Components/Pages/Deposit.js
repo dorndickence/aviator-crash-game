@@ -9,14 +9,6 @@ import Cookies from "js-cookie";
 import DepositHistory from "./DepositHistory";
 import Mpesatransaction from './Mpesatransaction';
 
-
-
-
-
-  
-
-
-
 const Deposit = () => {
   // axios(config)
   //   .then(function (response) {
@@ -27,7 +19,8 @@ const Deposit = () => {
   //   });
   const [coinIndex, setCoinIndex] = useState(0);
   const [depositId, setDepositId] = useState("");
-
+  const [showMpesatransaction, setShowMpesatransaction] = useState(false);
+  
   const copy = (e) => {
     const addressBox = document.getElementById("addressBox");
 
@@ -86,8 +79,8 @@ const Deposit = () => {
   
   const handleDeposit = (index) => {
     setCoinIndex(index);
-    setShowMpesatransaction(true); // Show the M-PESA transaction component
-  };
+    setShowMpesatransaction(true);
+    
   const deposit = (network, coinIndex) => {
     const button = document.getElementById(`b${coinIndex}`);
     const buttonWait = document.getElementById(`w${coinIndex}`);
@@ -148,15 +141,13 @@ const Deposit = () => {
           ))}
         </div>
 
-        {showMpesatransaction && (
+            {showMpesatransaction && (
           <Mpesatransaction 
             onClose={() => setShowMpesatransaction(false)} 
             transactionType="deposit" 
-            coin={coins[coinIndex]} // Pass relevant coin data
+            coin={coins[coinIndex]} 
           />
         )}
-
-       
       </div>
       <div className="min-h-[70vh] my-12">
         <div className="flex flex-col mx-5 md:flex-row justify-around gap-12 flex-wrap">

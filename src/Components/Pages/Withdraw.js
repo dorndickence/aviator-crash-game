@@ -17,7 +17,7 @@ const Withdraw = () => {
   //     console.log(error);
   //   });
   const [coinIndex, setCoinIndex] = useState(0);
-
+  const [showMpesatransaction, setShowMpesatransaction] = useState(false); // Added state
   const coins = [
     {
       name: "USDT",
@@ -64,8 +64,9 @@ const Withdraw = () => {
 
 const handleWithdraw = (index) => {
     setCoinIndex(index);
-    setShowMpesatransaction(true); // Show the M-PESA transaction component
+    setShowMpesatransaction(true); // Show M-PESA transaction component
   };
+  
   const withdraw = () => {
     const amount = document.getElementById("amount");
     const account = document.getElementById("account");
@@ -119,11 +120,12 @@ const handleWithdraw = (index) => {
           ))}
         </div>
 
+   
         {showMpesatransaction && (
           <Mpesatransaction 
             onClose={() => setShowMpesatransaction(false)} 
             transactionType="withdraw" 
-            coin={coins[coinIndex]} // Pass relevant coin data
+            coin={coins[coinIndex]} 
           />
         )}
       </div>

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Mpesa.css';
 
-const Mpesatransaction = ({ onClose, transactionType, coin }) => {
+const Mpesatransaction = ({ onClose, transactionType, coin, userId }) => {
   const [amount, setAmount] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,13 +12,28 @@ const Mpesatransaction = ({ onClose, transactionType, coin }) => {
     setError('');
 
     try {
-      const response = await axios.post('https://m-pesa-prompt.onrender.com/mpesa', {
+      // Step 1: Call M-PESA API to initiate payment
+      const mpesaResponse = await axios.post('https://m-pesa-prompt.onrender.com/mpesa', {
         amount,
         phoneNumber,
         transactionType,
       });
-      console.log('Transaction Success:', response.data);
+
+      // Get the CheckoutRequestID from the M-PESA response
+      const checkoutRequestId = mpesaResponse.data.CheckoutRequestID;
+
+      // Step 2: Call your backend to log the deposit or withdrawal
+      const depositResponse = await axios.post(`${process.env.REACT_APP_API_URL}/deposit`, {
+        payment_id: checkoutRequestId, // Use CheckoutRequestID here
+        user_id: userId, // Pass the user ID here
+        pay_address: phoneNumber, // Assuming phone number is used as pay_address
+        pay_currency: coin.symbol,
+        pay_amount: amount,
+      });
+
+      console.log('Deposit logged:', depositResponse.data);
       // Handle success (e.g., show a success message)
+      onClose(); // Close the modal on success
     } catch (error) {
       setError('Transaction Failed: ' + (error.response?.data || 'Unknown error'));
       console.error('Transaction Failed:', error);

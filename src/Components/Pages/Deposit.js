@@ -7,6 +7,16 @@ import bdt from "../../images/bdt.png";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import DepositHistory from "./DepositHistory";
+import Mpesatransaction from './Mpesatransaction';
+
+
+
+
+
+  
+
+
+
 const Deposit = () => {
   // axios(config)
   //   .then(function (response) {
@@ -73,7 +83,11 @@ const Deposit = () => {
       payNetwork: "SOLANA",
     },
   ];
-
+  
+  const handleDeposit = (index) => {
+    setCoinIndex(index);
+    setShowMpesatransaction(true); // Show the M-PESA transaction component
+  };
   const deposit = (network, coinIndex) => {
     const button = document.getElementById(`b${coinIndex}`);
     const buttonWait = document.getElementById(`w${coinIndex}`);
@@ -110,9 +124,40 @@ const Deposit = () => {
         }, 300);
       });
   };
+  
 
-  return (
+
+    return (
     <>
+          <div className="min-h-[70vh] my-12">
+        <div className="flex flex-col mx-5 md:flex-row justify-around gap-12 flex-wrap">
+          {coins.map((coin, index) => (
+            <div key={index} className="min-w-[200px]">
+              <div
+                className="flex mx-auto p-3 gap-3 border border-blue-200 rounded-lg cursor-pointer hover:bg-zinc-700"
+                onClick={() => handleDeposit(index)}
+              >
+                <div>
+                  <img src={coin.image} className="w-12" alt={coin.name} />
+                </div>
+                <div>
+                  <h2 className="text-base">{coin.name}</h2>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {showMpesatransaction && (
+          <Mpesatransaction 
+            onClose={() => setShowMpesatransaction(false)} 
+            transactionType="deposit" 
+            coin={coins[coinIndex]} // Pass relevant coin data
+          />
+        )}
+
+       
+      </div>
       <div className="min-h-[70vh] my-12">
         <div className="flex flex-col mx-5 md:flex-row justify-around gap-12 flex-wrap">
           {coins.map((coin, index) => {

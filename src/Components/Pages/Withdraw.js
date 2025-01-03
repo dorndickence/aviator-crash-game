@@ -19,6 +19,17 @@ const Withdraw = () => {
   const [coinIndex, setCoinIndex] = useState(0);
   const [showMpesatransaction, setShowMpesatransaction] = useState(false); // Added state
   const coins = [
+    
+    {
+      name: "M-PESA", // Add M-PESA entry
+      symbol: "mpesa",
+      image: mpesa, // Ensure you have an appropriate image
+      fullName: "Lipa na M-PESA",
+      network: "M-PESA",
+      colorName: "green",
+      payNetwork: "M-PESA",
+    },
+    
     {
       name: "USDT",
       symbol: "usdttrc20",

@@ -1,15 +1,37 @@
-
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useEffect, useRef, useState } from "react";
-// ... image imports
-
+import { useEffect, useState } from "react";
+import usdttrc20 from "../../images/usdttrc20.svg";
+import trx from "../../images/trx.svg";
+import dai from "../../images/dai.svg";
+import sol from "../../images/sol.svg";
+import bdt from "../../images/bdt2.png";
 const GameHistory = () => {
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(false);
   const [totalPages, setTotalPages] = useState([0]);
-  const historyRef = useRef(null); // Reference for scrolling
 
-  // ... currencyImage and historyMethod
+  const currencyImage = {
+    usdttrc20: usdttrc20,
+    sol: sol,
+    dai: dai,
+    trx: trx,
+    bdt: bdt,
+  };
+
+  const historyMethod = (page = 0) => {
+    axios
+      .post(`${process.env.REACT_APP_API_URL}game-history`, {
+        token: Cookies.get("token"),
+        page: page,
+      })
+      .then((data) => {
+        setHistory(data.data.data);
+        setTotalPages(data.data.totalPages);
+      })
+      .catch(() => {
+        setHistory(false);
+      });
+  };
 
   const getColor = (odds) => {
     if (odds >= 1 && odds <= 2) return "bg-blue-500 text-white"; // 1-2.00
@@ -127,16 +149,3 @@ const GameHistory = () => {
 };
 
 export default GameHistory;
-```
-
-### Changes Made:
-
-1. **Color Coding Logic:** The `getColor` function now defines colors based on the specified ranges:
-   - **1 - 2.00:** Blue (`bg-blue-500`)
-   - **2.01 - 9.9:** Purple (`bg-purple-500`)
-   - **10 - 99.9:** Pink (`bg-pink-500`)
-   - **100 and above:** Red (`bg-red-500`)
-
-2. **Applying Color to Odds:** The color is applied to the odds column by using the `getColor` function within the `<td>` element for odds.
-
-With these changes, your game history table will now display odds with the correct color coding based on the specified ranges.

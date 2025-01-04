@@ -28,6 +28,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Gamehistory/>
       {currentPath !== "/logout" && <Header />}
       <Routes>
         <Route index element={<Home />} />

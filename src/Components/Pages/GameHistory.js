@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
@@ -9,6 +10,14 @@ const GameHistory = () => {
   const historyRef = useRef(null); // Reference for scrolling
 
   // ... currencyImage and historyMethod
+
+  const getColor = (odds) => {
+    if (odds >= 1 && odds <= 2) return "bg-blue-500 text-white"; // 1-2.00
+    if (odds > 2 && odds <= 9.9) return "bg-purple-500 text-white"; // 2.01-9.9
+    if (odds > 10 && odds <= 99.9) return "bg-pink-500 text-white"; // 10-99.9
+    if (odds >= 100) return "bg-red-500 text-white"; // 100 and above
+    return ""; // Default case
+  };
 
   const fetchHistory = (page = 0) => {
     axios
@@ -61,7 +70,9 @@ const GameHistory = () => {
                   key={index}
                 >
                   <td>x{his.crash.$numberDecimal}</td>
-                  <td>x{his.odds.$numberDecimal}</td>
+                  <td className={getColor(his.odds.$numberDecimal)}>
+                    x{his.odds.$numberDecimal}
+                  </td>
                   <td>
                     <div className="flex gap-1 items-center justify-center">
                       {parseFloat(his.amount.$numberDecimal).toFixed(8)}{" "}
@@ -116,3 +127,16 @@ const GameHistory = () => {
 };
 
 export default GameHistory;
+```
+
+### Changes Made:
+
+1. **Color Coding Logic:** The `getColor` function now defines colors based on the specified ranges:
+   - **1 - 2.00:** Blue (`bg-blue-500`)
+   - **2.01 - 9.9:** Purple (`bg-purple-500`)
+   - **10 - 99.9:** Pink (`bg-pink-500`)
+   - **100 and above:** Red (`bg-red-500`)
+
+2. **Applying Color to Odds:** The color is applied to the odds column by using the `getColor` function within the `<td>` element for odds.
+
+With these changes, your game history table will now display odds with the correct color coding based on the specified ranges.
